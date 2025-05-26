@@ -1,17 +1,17 @@
-# Ata da Reunião – Arquitetura e Desenho de Software
+# Ata da Reunião 1 – Arquitetura e Desenho de Software
 
 **Data:** 19/05/2025
 
 **Participantes Presentes:**
 
-* Raphaela Guimarães de Araújo dos Santos
-* Taynara Gabrielle Vitorino
-* Letícia Torres Soares Martins
-* Rafael Gomes Pereira
 * João Pedro Silva Sousa
 * João Lucas Araújo Siqueira
+* Letícia Torres Soares Martins
 * Manoel Castro Moura Filho
 * Milena Fernandes Rocha
+* Rafael Gomes Pereira
+* Raphaela Guimarães de Araújo dos Santos
+* Taynara Gabrielle Vitorino
 
 ---
 
