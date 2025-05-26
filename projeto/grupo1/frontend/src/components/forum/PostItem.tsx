@@ -1,47 +1,68 @@
+"use client";
+
 import type { Post } from '@/services/api';
-import { CommentForm } from './CommentForm';
+import Link from 'next/link';
+import { MessageCircle, Trash2, User as UserIcon } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 type PostItemProps = {
   post: Post;
-  onCommentSubmit: (postId: number, commentText: string) => void;
+  onDelete: (postId: number) => void;
 };
 
-export function PostItem({ post, onCommentSubmit }: PostItemProps) {
-  const handleCommentSubmit = (commentText: string) => {
-    onCommentSubmit(post.id, commentText);
+export function PostItem({ post, onDelete }: PostItemProps) {
+  const { user } = useAuth();
+
+
+  const canDelete = user && (user.tipo === 'moderador' || user.id === post.autor.id);
+
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault(); 
+    e.stopPropagation();
+    if (confirm('Tem certeza que deseja excluir esta postagem? Todos os comentários associados também podem ser perdidos.')) {
+      onDelete(post.id);
+    }
   };
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6">
-      <div className="flex items-center mb-4">
-        <div className="w-10 h-10 rounded-full bg-gray-600 mr-4 flex-shrink-0"></div>
-        <div>
-          <p className="font-semibold text-white">{post.autor.nome}</p>
-          <p className="text-xs text-gray-400">
-            Postado em {new Date(post.dataCriacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-          </p>
+    <div className="bg-gray-800 border border-gray-700 rounded-lg mb-6 overflow-hidden relative">
+      {canDelete && (
+        <button 
+          onClick={handleDeleteClick}
+          className="absolute top-4 right-4 p-1.5 rounded-full text-gray-400 hover:bg-red-500/20 hover:text-red-400 z-10 transition-colors"
+          title="Excluir postagem"
+        >
+          <Trash2 size={18} />
+        </button>
+      )}
+
+      <Link href={`/postagens/${post.id}`} className="block p-6 hover:bg-gray-700/50 transition-colors duration-200">
+        <div className="flex items-center mb-4">
+          <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center mr-4 flex-shrink-0">
+            <UserIcon className="h-6 w-6 text-gray-400" />
+          </div>
+          <div>
+            <p className="font-semibold text-white">{post.autor.nome}</p>
+            <p className="text-xs text-gray-400">
+              Postado em {new Date(post.dataCriacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+            </p>
+          </div>
         </div>
-      </div>
-      <p className="text-gray-300 mb-4">{post.texto}</p>
-
-      <div className="border-t border-gray-700 pt-4">
-        <h4 className="text-sm font-semibold text-gray-400 mb-3">Comentários ({post.comentarios.length})</h4>
-
-        <div className="space-y-3 mb-4">
-          {post.comentarios.map(comment => (
-            <div key={comment.id} className="text-xs">
-              <span className="text-gray-300">
-                <strong className="font-medium">{comment.autor.nome}</strong> 
-                <span className="text-gray-500 ml-2">
-                  ({new Date(comment.dataCriacao).toLocaleDateString('pt-BR')})
-                </span>
-                : {comment.texto}
-              </span>
-            </div>
-          ))}
+        <p className="text-gray-300 min-h-[40px]">{post.texto}</p>
+      </Link>
+      
+      <div className="bg-gray-800/50 border-t border-gray-700 px-6 py-3 flex justify-between items-center">
+        <div className="flex items-center gap-2 text-gray-400">
+          <MessageCircle size={16} />
+          <span className="text-sm font-medium">{post.comentarios.length} Comentários</span>
         </div>
-
-        <CommentForm onCommentSubmit={handleCommentSubmit} />
+        <Link 
+          href={`/postagens/${post.id}#comentar`}
+          className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-full transition-colors"
+        >
+          Ver / Comentar
+        </Link>
       </div>
     </div>
   );
