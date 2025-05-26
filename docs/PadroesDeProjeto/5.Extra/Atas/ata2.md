@@ -55,8 +55,9 @@ As decisões e conclusões da reunião foram compiladas nesse [documento compart
 |                        **Grupo**       | **Integrantes**                                                                                                                     |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | **1**   | Milena Fernandes Rocha, Rafael Gomes Pereira, Letícia Torres Soares Martins                                                         |
-| **2**   | Taynara Gabrielle Vitorino, Antônio José Magalhães Leão Júnior, Carlos Eduardo de Sousa Paz, Raphaela Guimarães de Araújo dos Santos |
-| **3**   | João Pedro Silva Sousa, João Lucas Araújo Siqueira, Manoel Castro Moura Filho                                             |
+| **2**   | João Pedro Silva Sousa, João Lucas Araújo Siqueira, Manoel Castro Moura Filho                                             |
+| **3**   | Taynara Gabrielle Vitorino, Antônio José Magalhães Leão Júnior, Carlos Eduardo de Sousa Paz, Raphaela Guimarães de Araújo dos Santos |
+                                           |
 
 
 
