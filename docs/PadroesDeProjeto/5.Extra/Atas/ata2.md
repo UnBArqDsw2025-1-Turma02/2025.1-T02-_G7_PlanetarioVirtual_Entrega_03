@@ -57,7 +57,7 @@ As decisões e conclusões da reunião foram compiladas nesse [documento compart
 | **1**   | Milena Fernandes Rocha, Rafael Gomes Pereira, Letícia Torres Soares Martins                                                         |
 | **2**   | João Pedro Silva Sousa, João Lucas Araújo Siqueira, Manoel Castro Moura Filho                                             |
 | **3**   | Taynara Gabrielle Vitorino, Antônio José Magalhães Leão Júnior, Carlos Eduardo de Sousa Paz, Raphaela Guimarães de Araújo dos Santos |
-                                           |
+                                           
 
 
 
@@ -112,4 +112,5 @@ Autores: [Milena Rocha](https://github.com/MilenaFRocha) . Reunião 2 - Entrega3
 | Versão | Data       | Descrição                                           | Autor                                           | Revisor                                          |
 | ------ | ---------- | --------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------ |
 | 1.0    | 26/05/2025 | Criação da ata da reunião de estudo dos padrões GoF | [Milena Rocha](https://github.com/milenafrocha) | [Rafael Pereira](https://github.com/rafgpereira) |
+| 1.1    | 26/05/2025 | Ajustes dos grupos | [Milena Rocha](https://github.com/milenafrocha) | [Rafael Pereira](https://github.com/rafgpereira) |
 
