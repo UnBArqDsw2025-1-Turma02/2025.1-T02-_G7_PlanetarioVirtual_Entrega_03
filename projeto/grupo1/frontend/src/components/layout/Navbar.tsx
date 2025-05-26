@@ -1,0 +1,35 @@
+import Link from 'next/link';
+
+export function Navbar() {
+  return (
+    <nav className="w-full bg-gray-800 text-white shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex-shrink-0">
+            <Link href="/" className="text-xl font-bold">
+              Planetário Virtual
+            </Link>
+          </div>
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-4">
+              <Link href="/" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                Início
+              </Link>
+              <Link href="/usuarios" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                Usuários
+              </Link>
+              <Link href="/meu-perfil" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                Meu Perfil
+              </Link>
+            </div>
+          </div>
+          <div className="hidden md:block">
+             <Link href="/login" className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                Login
+              </Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
