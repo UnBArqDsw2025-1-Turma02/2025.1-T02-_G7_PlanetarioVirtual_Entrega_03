@@ -10,5 +10,5 @@
     - [3.4. Participações](./PadroesDeProjeto/4.Participacoes/3.4.ParticipacoesPadroes.md)
     - [3.5. Iniciativas Extras](./PadroesDeProjeto/5.Extra/3.5.IniciativasExtras.md)
       - **Atas**
-      - [Ata 1 - 23/05](./PadroesDeProjeto/5.Extra/Atas/ata1.md)
-      
+      - [Ata 1 - 19/05](./PadroesDeProjeto/5.Extra/Atas/ata1.md)
+      - [Ata 2 - 23/05](./PadroesDeProjeto/5.Extra/Atas/ata2.md)
