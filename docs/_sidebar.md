@@ -12,3 +12,5 @@
       - **Atas**
       - [Ata 1 - 19/05](./PadroesDeProjeto/5.Extra/Atas/ata1.md)
       - [Ata 2 - 23/05](./PadroesDeProjeto/5.Extra/Atas/ata2.md)
+      - **Coreções**
+      - [Correção do Diagrama de Sequência](./PadroesDeProjeto/5.Extra/Correcoes/estatico.md)
