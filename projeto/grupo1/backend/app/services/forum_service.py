@@ -7,7 +7,6 @@ from ..models.user_model import UserCreate
 
 DB_PATH = Path("db.json")
 
-
 class ForumService:
     def __init__(self, db_path: Path = DB_PATH):
         self.db_path = db_path
@@ -24,17 +23,11 @@ class ForumService:
 
     def get_all_users(self) -> List[UserData]:
         db = self._load_db()
-        return [UserData(**user_data) for user_data in db.get("usuarios", [])]
-
-    def get_user_by_id(self, user_id: int) -> Optional[UserData]:
-        db = self._load_db()
-        user = next((u for u in db.get("usuarios", []) if u["id"] == user_id), None)
-        return UserData(**user) if user else None
+        return [UserData(**u) for u in db.get("usuarios", [])]
 
     def create_user(self, user_create_data: UserCreate) -> UserData:
         db = self._load_db()
         usuarios = db.get("usuarios", [])
-
         existing_ids = [int(u["id"]) for u in usuarios if str(u["id"]).isdigit()]
         next_id = max(existing_ids) + 1 if existing_ids else 1
 
@@ -48,7 +41,7 @@ class ForumService:
         self._save_db(db)
 
         return UserData(**new_user)
-
+    
     def delete_user(self, user_id: int) -> dict:
         db = self._load_db()
         usuarios = db.get("usuarios", [])
@@ -62,6 +55,4 @@ class ForumService:
 
         return {"message": f"Usuário {user_id} excluído com sucesso."}
 
-
-# Instância global (caso necessário)
 forum_service = ForumService()
