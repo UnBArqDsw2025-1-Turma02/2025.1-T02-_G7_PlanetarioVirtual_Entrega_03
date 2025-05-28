@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import user_router
+from .routers import user_router, postagem_router, comentario_router
 
 app = FastAPI(
     title="Planetário Virtual API",
@@ -8,6 +8,8 @@ app = FastAPI(
 )
 
 app.include_router(user_router.router, prefix="/api")
+app.include_router(postagem_router.router, prefix="/api")
+app.include_router(comentario_router.router, prefix ="/api")
 
 @app.get("/health", tags=["Status"])
 async def health_check():

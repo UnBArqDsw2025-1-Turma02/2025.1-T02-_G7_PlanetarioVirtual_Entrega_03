@@ -1,35 +1,17 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import List
-from app.models.postagem_model import PostCreate, PostResponse
-import httpx
+from ..services.postagem_service import post_service
+from ..models.postagem_model import PostCreate, PostResponse
 
 router = APIRouter(
-    prefix="/posts",
+    prefix="/postagens",
     tags=["Postagens"]
 )
 
-JSON_SERVER_URL = "http://localhost:3001/posts"
-client: httpx.AsyncClient | None = None
-
-@router.on_event("startup")
-async def startup_event():
-    global client
-    client = httpx.AsyncClient()
-
-@router.on_event("shutdown")
-async def shutdown_event():
-    global client
-    if client:
-        await client.aclose()
-
 @router.get("/", response_model=List[PostResponse])
-async def listar_posts():
-    response = await client.get(JSON_SERVER_URL)
-    response.raise_for_status()
-    return response.json()
+async def listar_postagens():
+    return post_service.get_all_posts()
 
 @router.post("/", response_model=PostResponse, status_code=status.HTTP_201_CREATED)
-async def criar_post(post: PostCreate):
-    response = await client.post(JSON_SERVER_URL, json=post.dict())
-    response.raise_for_status()
-    return response.json()
+async def criar_postagem(post: PostCreate):
+    return post_service.create_post(post)

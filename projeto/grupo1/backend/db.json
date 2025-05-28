@@ -2,8 +2,24 @@
   "usuarios": [
     {
       "id": 1,
-      "nome": "João",
+      "nome": "Milena",
       "tipo": "comum"
+    }
+  ],
+  "postagens": [
+    {
+      "id": 1,
+      "titulo": "string",
+      "conteudo": "string",
+      "autor_id": 1
+    }
+  ],
+  "comentarios": [
+    {
+      "id": 1,
+      "conteudo": "string",
+      "autor_id": 1,
+      "postagem_id": 1
     }
   ]
 }
