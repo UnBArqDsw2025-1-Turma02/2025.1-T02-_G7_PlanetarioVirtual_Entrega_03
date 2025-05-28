@@ -42,6 +42,15 @@ class CommentService:
         self._save_db(db)
 
         return CommentData(**new_comment)
+    def delete_comment(self, id_comment: int) -> dict:
+        db = self._load_db()
+        comentarios = db.get("comentarios", [])
+        new_comentarios = [c for c in comentarios if c["id"] != id_comment]
+        if len(new_comentarios) == len(comentarios):
+            raise ValueError(f"Comentário com ID {id_comment} não encontrado.")
+        db["comentarios"] = new_comentarios
+        self._save_db(db)
+        return {"message": f"Comentário {id_comment} excluído com sucesso."}
 
 # Instância global
 comment_service = CommentService()

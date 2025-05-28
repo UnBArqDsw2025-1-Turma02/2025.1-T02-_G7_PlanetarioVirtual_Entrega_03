@@ -54,5 +54,10 @@ class ForumService:
         self._save_db(db)
 
         return {"message": f"Usuário {user_id} excluído com sucesso."}
+    
+    def get_user_by_id(self, user_id: int) -> Optional[UserData]:
+        db = self._load_db()
+        user = next((u for u in db.get("usuarios", []) if u["id"] == user_id), None)
+        return UserData(**user) if user else None
 
 forum_service = ForumService()

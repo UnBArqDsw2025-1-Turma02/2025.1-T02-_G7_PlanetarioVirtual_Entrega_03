@@ -4,16 +4,14 @@
       "id": 1,
       "nome": "Milena",
       "tipo": "comum"
-    }
-  ],
-  "postagens": [
+    },
     {
-      "id": 1,
-      "titulo": "string",
-      "conteudo": "string",
-      "autor_id": 1
+      "id": 2,
+      "nome": "string",
+      "tipo": "moderador"
     }
   ],
+  "postagens": [],
   "comentarios": [
     {
       "id": 1,

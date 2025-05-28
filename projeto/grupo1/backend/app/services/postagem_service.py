@@ -42,6 +42,15 @@ class PostService:
         self._save_db(db)
 
         return PostData(**new_post)
+    def delete_post(self, id_post: int) -> dict:
+        db = self._load_db()
+        postagens = db.get("postagens", [])
+        new_postagens = [p for p in postagens if p["id"] != id_post]
+        if len(new_postagens) == len(postagens):
+            raise ValueError(f"Post com ID {id_post} não encontrado.")
+        db["postagens"] = new_postagens
+        self._save_db(db)
+        return {"message": f"Post {id_post} excluído com sucesso."}
 
 # Instância global
 post_service = PostService()
