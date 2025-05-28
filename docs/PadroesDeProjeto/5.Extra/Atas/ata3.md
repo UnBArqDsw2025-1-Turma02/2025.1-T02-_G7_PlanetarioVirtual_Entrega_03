@@ -70,7 +70,15 @@ A reunião foi realizada **online via Teams**, com duração de **1 hora e 20 mi
 
 ## Link da Gravação
 
+Reunião feita via Teams e postado no YouTube como não listado a seguir no Vídeo 1
 
+<div style="text-align: center">
+
+Vídeo 1: Reunião 3 - Entrega 3
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_qZXwUps-hg" title="Reunião 3 - Entrega 3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Autores: [Antonio Junior](https://github.com/antonioleaojr) . Reunião 3 - Entrega 3. Disponível em: https://youtu.be/_qZXwUps-hg. Acesso em: 27 de maio 2025.
 
 <div>
 
@@ -85,4 +93,5 @@ A reunião foi realizada **online via Teams**, com duração de **1 hora e 20 mi
 | Versão | Data       | Descrição                                        | Autor                                           | Revisor                                          |
 | ------ | ---------- | ------------------------------------------------ | ----------------------------------------------- | ------------------------------------------------ |
 | 1.0    | 27/05/2025 | Criação da ata referente à reunião do grupo 3| [Antonio Junior](https://github.com/antonioleaojr) | [Taynara Vitorino](https://github.com/taybalau) |
+| 1.1    | 27/05/2025 | Adição do link do youtube| [Antonio Junior](https://github.com/antonioleaojr) | [Taynara Vitorino](https://github.com/taybalau) |
 
