@@ -27,6 +27,26 @@
       "titulo": "string",
       "conteudo": "string",
       "autor_id": 1
+    },
+    {
+      "id": 2,
+      "titulo": "string",
+      "conteudo": "string",
+      "autor_id": 0
+    },
+    {
+      "id": 3,
+      "titulo": "string",
+      "conteudo": "string",
+      "autor_id": 0,
+      "data_criacao": "2025-05-29"
+    },
+    {
+      "id": 4,
+      "titulo": "string",
+      "conteudo": "string",
+      "autor_id": 0,
+      "data_criacao": "2025-05-29"
     }
   ],
   "comentarios": [

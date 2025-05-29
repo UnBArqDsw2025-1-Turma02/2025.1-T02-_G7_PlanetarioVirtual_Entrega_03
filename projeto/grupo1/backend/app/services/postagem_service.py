@@ -40,7 +40,8 @@ class PostService:
             "id": next_id,
             "titulo": post_data.titulo,
             "conteudo": post_data.conteudo,
-            "autor_id": post_data.autor_id
+            "autor_id": post_data.autor_id,
+            "data_criacao": post_data.data_criacao.isoformat() if post_data.data_criacao else None
         }
 
         db["postagens"].append(new_post)
