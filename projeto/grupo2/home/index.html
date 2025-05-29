@@ -489,37 +489,39 @@
         }
     </script>
 
-    <body>
-        <footer id="main-footer"
-            class="w-full h-[350px] px-8 bg-[#00000000] text-white text-center text-lg font-semibold fixed left-0 bottom-0 z-[50]">
-            <h1>Foto do Dia da NASA</h1>
-            <style>
-                body {
-                    padding-bottom: 10px;
-                    font-family: sans-serif;
-                }
+   <footer id="main-footer"
+    class="w-full h-[250px] px-8 bg-transparent text-white text-center text-lg font-semibold fixed left-0 bottom-0 z-[50]">
+    <h1 class="mb-4">Foto do Dia da NASA</h1>
 
-                #nasa-photo {
-                    margin-top: 20px;
-                    padding: 15px;
-                    border-radius: 8px;
-                    color: #333;
-                }
+    <style>
+        body {
+            padding-bottom: 10px;
+            font-family: sans-serif;
+        }
 
-                #nasa-photo img {
-                    display: block;
-                    max-width: 50px;
-                    height: auto;
-                    margin: 10px auto;
-                }
-            </style>
-            <div id="nasa-photo">Carregando...</div>
-            <div class="flex justify-center items-center mt-4 h-[150px] w-[150px]">
-                <script src="fotododia.js">
-                </script>
-            </div>
-    </body>
-    </footer>
+        #nasa-photo {
+            padding-bottom: 50px;
+            width: 300px;
+            height: 200px;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            color: #333;
+        }
+
+        #nasa-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ou 'contain' */
+            border-radius: 10px;
+        }
+    </style>
+
+    <div id="nasa-photo">Carregando...</div>
+
+    <script src="fotododia.js"></script>
+</footer>
+
     <script>
         var elem = document.querySelector('.main-carousel');
         var flkty = new Flickity(elem, {
