@@ -22,12 +22,5 @@
     }
   ],
   "postagens": [],
-  "comentarios": [
-    {
-      "id": 1,
-      "conteudo": "string",
-      "autor_id": 0,
-      "postagem_id": 2
-    }
-  ]
+  "comentarios": []
 }

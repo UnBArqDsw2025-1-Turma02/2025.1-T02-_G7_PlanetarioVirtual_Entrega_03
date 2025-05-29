@@ -19,5 +19,5 @@ async def criar_comentario(comment: CommentCreate):
 
 @router.delete("/{id_comentario}")
 @verificar_moderador_por_id
-async def deletar_comentario(id_comentario: int, request: Request):
-    return comment_service.delete_comentario(id_comentario)
+async def deletar_comentario(id_comentario: int,user_id: int):
+    return comment_service.delete_comment(id_comentario)
