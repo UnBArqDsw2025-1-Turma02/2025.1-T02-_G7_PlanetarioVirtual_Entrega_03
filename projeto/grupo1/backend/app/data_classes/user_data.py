@@ -1,8 +1,7 @@
-# app/data_classes/user_data.py
-from dataclasses import dataclass
+from pydantic import BaseModel
+from typing import Literal
 
-@dataclass
-class UserData:
+class UserData(BaseModel):
     id: int
     nome: str
-    tipo: str  # "comum" ou "moderador"
+    tipo: Literal["comum", "moderador"]
