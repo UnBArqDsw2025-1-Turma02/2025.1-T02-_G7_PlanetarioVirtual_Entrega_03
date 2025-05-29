@@ -4,14 +4,17 @@ public class UserResponseDTO {
     private Long id;
     private String name;
     private String email;
+	private String about;
+	private String photoURL;
 
-    public UserResponseDTO(Long id, String name, String email) {
+    public UserResponseDTO(Long id, String name, String email,String about, String photoURL) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.about = about;
+        this.photoURL = photoURL;
     }
 
-    // Getters
     public Long getId() {
         return id;
     }
@@ -36,4 +39,21 @@ public class UserResponseDTO {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	public String getPhotoURL() {
+		return photoURL;
+	}
+
+	public void setPhotoURL(String photoURL) {
+		this.photoURL = photoURL;
+	}
+    
 }

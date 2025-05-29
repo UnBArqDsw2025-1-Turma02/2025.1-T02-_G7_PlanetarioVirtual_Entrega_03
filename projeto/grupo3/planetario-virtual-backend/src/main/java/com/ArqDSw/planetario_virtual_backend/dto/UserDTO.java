@@ -7,6 +7,10 @@ public class UserDTO {
 	private String email;
 	
 	private String password;
+	
+	private String about; 
+	
+	private String photoURL; 
 
 
 	public String getName() {
@@ -31,6 +35,21 @@ public class UserDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}	
+	}
 
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	public String getPhotoURL() {
+		return photoURL;
+	}
+
+	public void setPhotoURL(String photoURL) {
+		this.photoURL = photoURL;
+	}
 }

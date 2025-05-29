@@ -48,7 +48,7 @@ public class UserController {
     @ApiResponse(responseCode = "201", description = "User successfully created")
     @ApiResponse(responseCode = "400", description = "Invalid input or email already in use")
     public ResponseEntity<UserResponseDTO> signUpUser(@Valid @RequestBody UserDTO userDTO) {
-        UserResponseDTO newUser = userService.signUpUser(userDTO);
+        UserResponseDTO newUser = userService.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 

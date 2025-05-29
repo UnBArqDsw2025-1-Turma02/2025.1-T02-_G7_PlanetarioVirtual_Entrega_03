@@ -1,6 +1,7 @@
 package com.ArqDSw.planetario_virtual_backend.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,27 +36,29 @@ public class UserService {
     }
 
     public List<UserResponseDTO> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
+        return userRepository.findAll().stream()
                 .map(this::convertToResponseDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public UserResponseDTO getUserById(Long id) {
-        return userRepository.findById(id)
-                .map(this::convertToResponseDTO)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        return convertToResponseDTO(user);
     }
 
-    public UserResponseDTO signUpUser(UserDTO userDTO) {
+    public UserResponseDTO createUser(UserDTO userDTO) {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
             throw new DuplicateEmailException("Email already in use: " + userDTO.getEmail());
         }
 
-        User newUser = new User();
-        newUser.setName(userDTO.getName());
-        newUser.setEmail(userDTO.getEmail());
-        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        User newUser = new User.UserBuilder()
+            .name(userDTO.getName())
+            .email(userDTO.getEmail())
+            .password(passwordEncoder.encode(userDTO.getPassword()))
+            .about(userDTO.getAbout()) 
+            .photoURL(userDTO.getPhotoURL()) 
+            .build();
 
         User savedUser = userRepository.save(newUser);
         return convertToResponseDTO(savedUser);
@@ -69,13 +72,12 @@ public class UserService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        //String token = jwtTokenService.generateToken(user);
+        // String token = jwtTokenService.generateToken(user.getEmail());
+        // loginDTO.setToken(token);
+        
+        loginDTO.setToken("mock-jwt-token-for-" + user.getEmail());
 
-        UserLoginDTO responseDTO = new UserLoginDTO();
-        responseDTO.setEmail(user.getEmail());
-        //responseDTO.setToken(token);
-        responseDTO.setPassword(null); 
-        return responseDTO;
+        return loginDTO;
     }
 
     public UserResponseDTO updateUser(Long id, UserDTO userDTO) {
@@ -98,6 +100,15 @@ public class UserService {
         if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
+        
+        if (userDTO.getAbout() != null) { 
+            existingUser.setAbout(userDTO.getAbout());
+        }
+        
+        if (userDTO.getPhotoURL() != null) { 
+            existingUser.setPhotoURL(userDTO.getPhotoURL());
+        }
+
 
         User updatedUser = userRepository.save(existingUser);
         return convertToResponseDTO(updatedUser);
@@ -114,7 +125,9 @@ public class UserService {
         return new UserResponseDTO(
             user.getId(),
             user.getName(),
-            user.getEmail()
+            user.getEmail(),
+            user.getPhotoURL(),
+            user.getAbout()
         );
     }
 }
