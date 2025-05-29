@@ -18,6 +18,13 @@ async def listar_postagens():
 async def criar_postagem(post: PostCreate):
     return post_service.create_post(post)
 
+@router.get("/{id_post}/comentarios")
+async def listar_comentarios_por_postagem(id_post: int):
+    comentarios = post_service.get_comments_by_post_id(id_post)
+    if not comentarios:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Postagem não encontrada ou sem comentários.")
+    return comentarios
+
 
 @router.delete("/{id_post}")
 @verificar_moderador_por_id

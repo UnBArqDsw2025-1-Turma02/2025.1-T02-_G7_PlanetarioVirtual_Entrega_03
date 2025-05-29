@@ -23,7 +23,12 @@ class PostService:
     def get_all_posts(self) -> List[PostData]:
         db = self._load_db()
         return [PostData(**post_data) for post_data in db.get("postagens", [])]
-
+    
+    def get_comments_by_post_id(self, post_id: int) -> List[dict]:
+        db = self._load_db()
+        comentarios = db.get("comentarios", [])
+        return [c for c in comentarios if c.get("postagem_id") == post_id]
+    
     def create_post(self, post_data: PostCreate) -> PostData:
         db = self._load_db()
         postagens = db.get("postagens", [])
