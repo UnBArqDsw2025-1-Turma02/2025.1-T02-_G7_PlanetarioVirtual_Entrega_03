@@ -1,0 +1,26 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nome": "Milena",
+      "tipo": "comum"
+    },
+    {
+      "id": 2,
+      "nome": "string",
+      "tipo": "moderador"
+    },
+    {
+      "id": 3,
+      "nome": "ariel",
+      "tipo": "comum"
+    },
+    {
+      "id": 4,
+      "nome": "milena2",
+      "tipo": "comum"
+    }
+  ],
+  "postagens": [],
+  "comentarios": []
+}
