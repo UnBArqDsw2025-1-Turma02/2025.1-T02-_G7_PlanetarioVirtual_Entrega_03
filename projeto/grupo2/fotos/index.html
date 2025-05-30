@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="logo.svg" type="image/svg+xml"> <title>Planetario Virtual - Fundo Estrelado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS para o Fundo Estrelado */
+        html {
+            height: 100%;
+            overflow: hidden;
+            /* Impede barras de rolagem causadas pelas estrelas distantes */
+        }
+
+        body {
+            /* m-0 p-0 são classes Tailwind, mas garantimos aqui também */
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            /* Fundo base escuro, o gradiente adiciona profundidade */
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            color: white;
+            /* Cor padrão do texto para contraste */
+            font-family: sans-serif;
+            /* Uma fonte padrão */
+        }
+
+        /* Container para as camadas de estrelas */
+        #star-sky-container {
+            position: fixed;
+            /* Cobre toda a janela de visualização */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            /* Coloca bem atrás, abaixo da navbar que tem z-50 */
+            pointer-events: none;
+            /* Permite cliques através das estrelas */
+        }
+
+        /* Camada de estrelas pequenas */
+        .stars-small::before {
+            content: "";
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            box-shadow:
+                1865px 1268px #FFF, 1086px 139px #FFF, 1104px 126px #FFF, 791px 1631px #FFF, 1593px 146px #FFF,
+                100px 800px #DDD, 1200px 300px #EEE, 500px 1500px #FFF, 1800px 1000px #DDD,
+                300px 200px #FFF, 1500px 600px #EEE, 700px 1200px #FFF, 2000px 400px #DDD,
+                850px 50px #FFF, 1350px 1700px #EEE, 10px 1900px #FFF, 950px 950px #DDD,
+                450px 750px #FFF, 1650px 1350px #EEE, 250px 1050px #FFF, 1150px 1850px #DDD,
+                1950px 150px #FFF, 650px 550px #EEE, 1750px 850px #FFF, 50px 1250px #DDD,
+                10vw 20vh #FFF, 80vw 30vh #DDD, 30vw 70vh #EEE, 90vw 85vh #FFF,
+                5vw 90vh #FFF, 50vw 10vh #DDD, 70vw 50vh #EEE, 25vw 55vh #FFF,
+                60vw 5vh #FFF, 15vw 45vh #DDD, 95vw 60vh #EEE, 40vw 95vh #FFF;
+            animation: twinkle 7s infinite linear alternate;
+        }
+
+        /* Camada de estrelas médias */
+        .stars-medium::before {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: transparent;
+            box-shadow:
+                100px 100px #FFF, 1500px 1800px #FFF, 700px 500px #EEE, 1200px 900px #FFF,
+                1900px 300px #DDD, 400px 1600px #FFF, 1000px 1200px #EEE, 1700px 700px #FFF,
+                20vw 80vh #FFF, 75vw 15vh #EEE, 45vw 45vh #FFF, 90vw 5vh #DDD,
+                5vw 50vh #FFF, 60vw 90vh #EEE, 30vw 20vh #FFF, 85vw 65vh #DDD;
+            animation: twinkle 10s infinite linear alternate-reverse;
+        }
+
+        /* Camada de estrelas grandes */
+        .stars-large::before {
+            content: "";
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: transparent;
+            box-shadow:
+                500px 800px #FFF, 1500px 200px #EEE, 1000px 1500px #FFF,
+                30vw 50vh #FFF, 70vw 80vh #EEE, 10vw 10vh #FFF, 90vw 30vh #DDD;
+            animation: twinkle 12s infinite linear alternate;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+
+<body class="m-0 p-0 overflow-hidden"> <div id="star-sky-container">
+        <div class="stars-small"></div>
+        <div class="stars-medium"></div>
+        <div class="stars-large"></div>
+    </div>
+
+    <header class="fixed top-0 left-0 w-full flex items-center justify-between px-12 py-4 z-50"
+        style="background: rgba(0,0,0,0.4);">
+        <div class="flex items-center gap-3">
+            <img src="../home/logo.svg" alt="Logo" class="h-10 w-10 rounded-full object-cover" id="header-logo">
+            <span class="text-white text-2xl font-bold">Planetario Virtual</span>
+        </div>
+        <nav>
+            <ul class="flex gap-8">
+                <li><a href="../home/index.html" class="text-white text-xl hover:underline">Home</a></li>
+                <li><a href="../fotos/index.html" class="text-white text-xl hover:underline">Fotos da Nasa</a></li>
+                <li><a href="#" class="text-white text-xl hover:underline">Sobre</a></li>
+                <li><a href="#" class="text-white text-xl hover:underline">SignUp</a></li>
+                <li><a href="#" class="text-white text-xl hover:underline">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <footer id="main-footer"
+        class="w-full h-[700px] px-8 bg-transparent text-white text-center text-lg font-semibold fixed left-0 bottom-0 z-[50] overflow-y-auto"> 
+        <h1 class="text-[40px] font-bold pb-20 pt-6">Foto do Dia da NASA</h1>
+
+        <style>
+
+            #nasa-photo {
+                width: 90%; /* Ocupa 90% da largura do rodapé */
+                max-width: 900px; /* Limite máximo para telas grandes */
+                max-height: 350px; /* Altura mínima para o conteúdo APOD */
+                margin: 20px auto; /* Centraliza horizontalmente e adiciona margem vertical */
+                border-radius: 10px;
+                overflow: visible; /* PERMITE QUE O CONTEÚDO SEJA VISTO */
+                color: #e0e0e0; /* Cor clara para o texto "Carregando..." ou erros */
+            }
+
+        </style>
+
+        <div id="nasa-photo">Carregando...</div>
+
+        <script src="fotododia.js"></script>
+    </footer>
+
+</body>
+</html>
