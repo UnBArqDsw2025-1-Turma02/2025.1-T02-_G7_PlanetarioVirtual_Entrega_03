@@ -3,64 +3,9 @@
     {
       "id": 1,
       "nome": "Milena",
-      "tipo": "comum"
-    },
-    {
-      "id": 2,
-      "nome": "string",
       "tipo": "moderador"
-    },
-    {
-      "id": 3,
-      "nome": "ariel",
-      "tipo": "comum"
-    },
-    {
-      "id": 4,
-      "nome": "milena2",
-      "tipo": "comum"
     }
   ],
-  "postagens": [
-    {
-      "id": 1,
-      "titulo": "string",
-      "conteudo": "string",
-      "autor_id": 1
-    },
-    {
-      "id": 2,
-      "titulo": "string",
-      "conteudo": "string",
-      "autor_id": 0
-    },
-    {
-      "id": 3,
-      "titulo": "string",
-      "conteudo": "string",
-      "autor_id": 0,
-      "data_criacao": "2025-05-29"
-    },
-    {
-      "id": 4,
-      "titulo": "string",
-      "conteudo": "string",
-      "autor_id": 0,
-      "data_criacao": "2025-05-29"
-    }
-  ],
-  "comentarios": [
-    {
-      "id": 1,
-      "conteudo": "string",
-      "autor_id": 0,
-      "postagem_id": 1
-    },
-    {
-      "id": 2,
-      "conteudo": "string",
-      "autor_id": 0,
-      "postagem_id": 1
-    }
-  ]
+  "postagens": [],
+  "comentarios": []
 }
