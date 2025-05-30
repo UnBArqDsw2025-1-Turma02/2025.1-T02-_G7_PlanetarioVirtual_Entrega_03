@@ -103,34 +103,27 @@ export const getPostById = async (id: number): Promise<Post | undefined> => {
   return post;
 };
 
-// ############# INÍCIO DA MUDANÇA #############
-
-// A função getUsers agora busca dados reais da sua API
 export const getUsers = async (): Promise<User[]> => {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   try {
-    console.log('API REAL: Buscando todos os usuários...');
-    const response = await fetch(`${API_BASE_URL}/api/usuarios/`);
-
-    // Se a requisição falhar, lança um erro
+     const response = await fetch(`${API_BASE_URL}/api/usuarios/`);
     if (!response.ok) {
-      throw new Error(`Erro na API: ${response.statusText}`);
+      throw new Error(`Erro ${response.status} ao buscar usuários.`);
     }
-
-    const users = await response.json();
-    console.log('API REAL: Usuários retornados com sucesso.');
-    return users;
+    const usersData = await response.json();
+    console.log(`API: ${usersData.length} usuários encontrados.`);
+    return usersData;
 
   } catch (error) {
-    // Em caso de erro na rede ou na API, loga o erro e retorna os dados mockados como um fallback
-    // para que o resto do sistema não quebre.
-    console.error("Falha ao buscar usuários da API real, usando dados mockados como fallback.", error);
-    return initialUsers;
+    if (error instanceof Error && error.message.startsWith('Erro ')) {
+        throw error;
+    }
+    throw new Error("Não foi possível conectar à API de usuários.");
   }
 };
 
-// ############# FIM DA MUDANÇA #############
+
 export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
     console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
     await new Promise(resolve => setTimeout(resolve, 500));
