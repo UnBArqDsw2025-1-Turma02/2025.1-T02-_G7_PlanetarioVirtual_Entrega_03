@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import List
 from ..models.comentario_model import CommentCreate
 from ..data_classes.comentario_data import CommentData
+from datetime import datetime
 
 DB_PATH = Path("db.json")
 
@@ -24,18 +25,23 @@ class CommentService:
         db = self._load_db()
         return [CommentData(**c) for c in db.get("comentarios", [])]
 
-    def create_comment(self, comment_data: CommentCreate) -> CommentData:
+    def create_comment(self, id_post: int, comment_data: CommentCreate) -> CommentData:
         db = self._load_db()
         comentarios = db.get("comentarios", [])
 
         existing_ids = [int(c["id"]) for c in comentarios if str(c["id"]).isdigit()]
         next_id = max(existing_ids) + 1 if existing_ids else 1
+        nome_autor = next((u["nome"] for u in db.get("usuarios", []) if u["id"] == comment_data.autor_id), "Autor Desconhecido")
+        if not nome_autor:
+            raise ValueError(f"Autor com ID {comment_data.autor_id} não encontrado.")
 
         new_comment = {
             "id": next_id,
             "conteudo": comment_data.conteudo,
             "autor_id": comment_data.autor_id,
-            "postagem_id": comment_data.postagem_id
+            "postagem_id": id_post,
+            "data_criacao": datetime.now().isoformat() , # Usando a data atual
+            "nome_autor": nome_autor
         }
 
         db.setdefault("comentarios", []).append(new_comment)
