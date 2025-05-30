@@ -103,13 +103,34 @@ export const getPostById = async (id: number): Promise<Post | undefined> => {
   return post;
 };
 
+// ############# INÍCIO DA MUDANÇA #############
+
+// A função getUsers agora busca dados reais da sua API
 export const getUsers = async (): Promise<User[]> => {
-  console.log('API MOCK: Buscando todos os usuários...');
-  await new Promise(resolve => setTimeout(resolve, 700));
-  console.log('API MOCK: Usuários retornados.');
-  return initialUsers;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  try {
+    console.log('API REAL: Buscando todos os usuários...');
+    const response = await fetch(`${API_BASE_URL}/api/usuarios/`);
+
+    // Se a requisição falhar, lança um erro
+    if (!response.ok) {
+      throw new Error(`Erro na API: ${response.statusText}`);
+    }
+
+    const users = await response.json();
+    console.log('API REAL: Usuários retornados com sucesso.');
+    return users;
+
+  } catch (error) {
+    // Em caso de erro na rede ou na API, loga o erro e retorna os dados mockados como um fallback
+    // para que o resto do sistema não quebre.
+    console.error("Falha ao buscar usuários da API real, usando dados mockados como fallback.", error);
+    return initialUsers;
+  }
 };
 
+// ############# FIM DA MUDANÇA #############
 export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
     console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
     await new Promise(resolve => setTimeout(resolve, 500));
