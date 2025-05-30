@@ -21,6 +21,26 @@
       "tipo": "comum"
     }
   ],
-  "postagens": [],
-  "comentarios": []
+  "postagens": [
+    {
+      "id": 1,
+      "titulo": "string",
+      "conteudo": "string",
+      "autor_id": 1
+    }
+  ],
+  "comentarios": [
+    {
+      "id": 1,
+      "conteudo": "string",
+      "autor_id": 0,
+      "postagem_id": 1
+    },
+    {
+      "id": 2,
+      "conteudo": "string",
+      "autor_id": 0,
+      "postagem_id": 1
+    }
+  ]
 }
