@@ -40,7 +40,6 @@ export default function MeuPerfilPage() {
       id: Date.now(),
       texto: postText,
       autor: user,
-      comentarios: [],
       dataCriacao: new Date().toISOString(),
     };
     setMyPosts(prevPosts => [newPost, ...prevPosts]);

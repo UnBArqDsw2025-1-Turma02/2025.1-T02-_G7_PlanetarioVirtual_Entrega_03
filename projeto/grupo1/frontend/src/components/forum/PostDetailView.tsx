@@ -3,17 +3,17 @@ import { User as UserIcon, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { createComment, deleteComment } from '@/services/api';
-import type { Post, Comment as CommentType, User as UserType } from '@/services/api'; 
+import type { PostWithComments, Comment as CommentType, User as UserType } from '@/services/api'; 
 import { CommentForm } from './CommentForm';
 
 
 type PostDetailViewProps = {
-  initialPost: Post;
+  initialPost: PostWithComments;
 };
 
 
 export function PostDetailView({ initialPost }: PostDetailViewProps) {
-  const [post, setPost] = useState<Post>(initialPost);
+  const [post, setPost] = useState<PostWithComments>(initialPost);
   const { user } = useAuth();
 
   

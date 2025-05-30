@@ -56,7 +56,7 @@ export function PostItem({ post, onDelete }: PostItemProps) {
         <div className="bg-gray-800/50 border-t border-gray-700 px-6 py-3 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
           <div className="flex items-center gap-2 text-gray-400">
             <MessageCircle size={16} />
-            <span className="text-sm font-medium">{post.comentarios.length} Comentários</span>
+            <span className="text-sm font-medium">Comentários</span>
           </div>
         </div>
       </Link>

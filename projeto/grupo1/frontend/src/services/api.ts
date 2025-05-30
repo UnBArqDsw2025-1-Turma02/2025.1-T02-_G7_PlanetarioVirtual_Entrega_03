@@ -1,3 +1,6 @@
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
 export type User = {
   id: number;
   nome: string;
@@ -15,10 +18,20 @@ export type Post = {
   id: number;
   texto: string;
   autor: User;
-  comentarios: Comment[];
   dataCriacao: string;
 };
 
+export type PostWithComments = Post & {
+  comentarios: Comment[];
+};
+
+type ApiPostResponseItem = {
+  id: number;
+  conteudo: string;
+  autor_id: number;
+  nome_autor: string;
+  data_criacao: string;
+};
 
 export const initialUsers: User[] = [
   { id: 1, nome: 'Alice Comum', tipo: 'comum' },
@@ -29,85 +42,75 @@ export const initialUsers: User[] = [
   { id: 6, nome: 'Franco Admin', tipo: 'moderador' },
 ];
 
-export const initialPosts: Post[] = [
+export const getPostById = async (postId: number): Promise<PostWithComments | null> => {
+  console.log(`API MOCK: Buscando postagem com ID: ${postId}...`);
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  const post = initialPosts.find(p => p.id === postId) || null;
+  console.log(`API MOCK: Postagem encontrada:`, post);
+  return post;
+};
+
+export const getPosts = async (): Promise<Post[]> => {
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/postagens/`);
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error(`Frontend: Erro na API ao buscar postagens - Status ${response.status}`, errorData);
+      throw new Error(`Erro ${response.status} ao buscar postagens. Tente novamente mais tarde.`);
+    }
+    const apiPosts: ApiPostResponseItem[] = await response.json();
+    const posts: Post[] = apiPosts.map(apiPost => {
+      let autorObjeto = initialUsers.find(u => u.id === apiPost.autor_id);
+      if (!autorObjeto) {
+
+        autorObjeto = {
+          id: apiPost.autor_id,
+          nome: apiPost.nome_autor,
+          tipo: 'comum',
+        };
+      }
+      return {
+        id: apiPost.id,
+        texto: apiPost.conteudo,
+        autor: autorObjeto,
+        dataCriacao: new Date(apiPost.data_criacao).toISOString(),
+      };
+    });
+
+    return posts;
+  } catch (error) {
+    console.error("Frontend: Falha crítica ao buscar postagens.", error);
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Não foi possível conectar à API de postagens. Verifique sua conexão.");
+  }
+};
+
+const initialPosts: PostWithComments[] = [
   {
-    id: 106,
-    texto: 'Anúncio: Criamos uma nova seção no fórum dedicada à Astrofotografia! Compartilhem suas melhores fotos do céu noturno lá.',
-    autor: initialUsers[5], 
-    dataCriacao: new Date('2025-05-26T18:00:00Z').toISOString(),
+    id: 1,
+    texto: "Olá, pessoal! Estou animado para participar deste fórum.",
+    autor: { id: 1, nome: "Alice Comum", tipo: "comum" },
+    dataCriacao: "2023-10-01T10:00:00Z",
     comentarios: [
-       { id: 508, texto: 'Que ótima notícia! Já vou postar as minhas.', autor: initialUsers[0], dataCriacao: new Date('2025-05-26T18:05:00Z').toISOString() },
-    ],
-  },
-  {
-    id: 105,
-    texto: 'Consegui tirar uma foto incrível da Lua Cheia ontem à noite. A cratera Tycho estava super visível. Alguém mais viu?',
-    autor: initialUsers[3], 
-    dataCriacao: new Date('2025-05-25T22:15:00Z').toISOString(),
-    comentarios: [
-       { id: 507, texto: 'Eu vi! Estava linda mesmo. Parabéns pela foto!', autor: initialUsers[4], dataCriacao: new Date('2025-05-26T09:10:00Z').toISOString() },
-    ],
-  },
-  {
-    id: 104,
-    texto: 'As últimas imagens do Telescópio James Webb são de tirar o fôlego. A nebulosa de Carina nunca pareceu tão detalhada.',
-    autor: initialUsers[4], 
-    dataCriacao: new Date('2025-05-25T15:00:00Z').toISOString(),
-    comentarios: [],
-  },
-  {
-    id: 101,
-    texto: 'Acabei de observar Júpiter com meu novo telescópio! As faixas de nuvens e as luas galileanas são incríveis de se ver.',
-    autor: initialUsers[0], 
-    dataCriacao: new Date('2025-05-24T21:30:00Z').toISOString(),
-    comentarios: [
-      { id: 501, texto: 'Que legal, Alice! Qual telescópio você usou?', autor: initialUsers[2], dataCriacao: new Date('2025-05-24T21:35:00Z').toISOString() },
-      { id: 502, texto: 'Fantástico! Júpiter é o meu planeta favorito.', autor: initialUsers[1], dataCriacao: new Date('2025-05-24T21:40:00Z').toISOString() },
-      { id: 505, texto: 'Também observei ontem, a Grande Mancha Vermelha estava bem nítida.', autor: initialUsers[3], dataCriacao: new Date('2025-05-25T10:00:00Z').toISOString() },
-    ],
-  },
-  {
-    id: 103,
-    texto: 'Lembrete amigável do moderador: vamos manter as discussões respeitosas e focadas em astronomia. Obrigado a todos!',
-    autor: initialUsers[1], 
-    dataCriacao: new Date('2025-05-24T11:00:00Z').toISOString(),
-    comentarios: [],
-  },
-  {
-    id: 102,
-    texto: 'Alguém tem dicas de livros sobre a teoria da relatividade para iniciantes? É um assunto que sempre me fascinou.',
-    autor: initialUsers[2], 
-    dataCriacao: new Date('2025-05-23T19:45:00Z').toISOString(),
-    comentarios: [
-      { id: 506, texto: '"Uma Breve História do Tempo" de Stephen Hawking é um clássico, mas pode ser denso. Tente "Relatividade" de Albert Einstein, o próprio livro dele é surpreendentemente acessível.', autor: initialUsers[4], dataCriacao: new Date('2025-05-24T09:00:00Z').toISOString() },
+      {
+        id: 1,
+        texto: "Bem-vinda, Alice! Estamos felizes em tê-la aqui.",
+        autor: { id: 2, nome: "Bob Moderador", tipo: "moderador" },
+        dataCriacao: "2023-10-01T10:05:00Z",
+      },
     ],
   },
 ];
 
-
-
-export const getPosts = async (): Promise<Post[]> => {
-  console.log('API MOCK: Buscando todas as postagens...');
-  await new Promise(resolve => setTimeout(resolve, 500)); 
-  
-  const sortedPosts = [...initialPosts].sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
-  console.log('API MOCK: Postagens retornadas.');
-  return sortedPosts;
-};
-
-export const getPostById = async (id: number): Promise<Post | undefined> => {
-  console.log(`API MOCK: Buscando postagem com ID: ${id}...`);
-  await new Promise(resolve => setTimeout(resolve, 300));
-
-  const post = initialPosts.find(p => p.id === id);
-  return post;
-};
-
 export const getUsers = async (): Promise<User[]> => {
-   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   try {
-     const response = await fetch(`${API_BASE_URL}/api/usuarios/`);
+    const response = await fetch(`${API_BASE_URL}/api/usuarios/`);
     if (!response.ok) {
       throw new Error(`Erro ${response.status} ao buscar usuários.`);
     }
@@ -117,7 +120,7 @@ export const getUsers = async (): Promise<User[]> => {
 
   } catch (error) {
     if (error instanceof Error && error.message.startsWith('Erro ')) {
-        throw error;
+      throw error;
     }
     throw new Error("Não foi possível conectar à API de usuários.");
   }
@@ -125,14 +128,14 @@ export const getUsers = async (): Promise<User[]> => {
 
 
 export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
-    console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const userPosts = initialPosts.filter(p => p.autor.id === userId);
-    const sortedPosts = [...userPosts].sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
-    
-    console.log(`API MOCK: Encontradas ${sortedPosts.length} postagens para o usuário ID: ${userId}.`);
-    return sortedPosts;
+  console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  const userPosts = initialPosts.filter(p => p.autor.id === userId);
+  const sortedPosts = [...userPosts].sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
+
+  console.log(`API MOCK: Encontradas ${sortedPosts.length} postagens para o usuário ID: ${userId}.`);
+  return sortedPosts;
 };
 
 export const createComment = async (postId: number, author: User, text: string): Promise<Comment> => {
