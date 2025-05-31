@@ -20,7 +20,7 @@ export function PostItem({ post, onDelete }: PostItemProps) {
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (confirm('Tem certeza que deseja excluir esta postagem? Todos os comentários associados também podem ser perdidos.')) {
+    if (confirm('Tem certeza que deseja excluir esta postagem? Todos os comentários associados também serão excluídos.')) {
       onDelete(post.id);
     }
   };
