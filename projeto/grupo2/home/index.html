@@ -1,157 +1,162 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <title>Planetario</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
-  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-  <style>
-  .flickity-viewport:focus, 
-  .main-carousel:focus {
-    outline: none !important;
-    box-shadow: none !important;
-  }
-</style>
-</head>
-<body class="m-0 p-0 overflow-hidden">
-  <!-- Topbar/Header -->
-  <header class="fixed top-0 left-0 w-full flex items-center justify-between px-12 py-4 z-50" style="background: rgba(0,0,0,0.4);">
-    <div class="flex items-center gap-3">
-      <img src="logo.svg" alt="Logo" class="h-10 w-10 rounded-full object-cover" id="header-logo">
-      <span class="text-white text-2xl font-bold">Planetario Virtual</span>
-    </div>
-    <nav>
-      <ul class="flex gap-8">
-        <li><a href="#" class="text-white text-xl hover:underline">Home</a></li>
-        <li><a href="#" class="text-white text-xl hover:underline">Sobre</a></li>
-        <li><a href="#" class="text-white text-xl hover:underline">SignUp</a></li>
-        <li><a href="#" class="text-white text-xl hover:underline">Login</a></li>
-      </ul>
-    </nav>
-  </header>
-  <div id="game-container"></div>
-  <script src="astrodados.js"></script>
-  <script>
-    const config = {
-      type: Phaser.AUTO,
-      width: window.innerWidth,
-      height: window.innerHeight,
-      parent: 'game-container',
-      backgroundColor: '#000000',
-      scene: {
-        preload: preload,
-        create: create,
-        update: update
-      }
-    };
-
-    const game = new Phaser.Game(config);
-
-    function criarAstro(scene, x, y, tamanho = 50, corHex = 0xffffff, orbita = null, zoom = 3, trilha = 0.5, textura = null, anguloInicial = 0, sentidoHorario = true) {
-        const astro = scene.add.circle(x, y, tamanho, corHex);
-        astro.setInteractive();
-        astro.setFillStyle(corHex, 0);
-        astro.setDepth(1);
-
-        let sprite = null;
-        if (textura) {
-            sprite = scene.add.image(x, y, textura);
-            sprite.setDisplaySize(tamanho * 2, tamanho * 2);
-            sprite.setDepth(0);
-            sprite.setInteractive();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="logo.svg" type="image/svg+xml">
+    <title>Planetario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <style>
+        .flickity-viewport:focus,
+        .main-carousel:focus {
+            outline: none !important;
+            box-shadow: none !important;
         }
+    </style>
+</head>
 
-        astro.on('pointerdown', () => {
-            scene.cameras.main.startFollow(astro);
-            scene.cameras.main.zoomTo(zoom, 5000);
-            const desc = astroDados[textura] || 'Astro Desconhecido';
-            const [titulo, ...resto] = desc.split('\n');
-            scene.planetTitleText.setText(titulo);
-            scene.planetNameText.setText(resto.join('\n'));
-        });
+<body class="m-0 p-0 overflow-hidden">
+    <!-- Topbar/Header -->
+    <header class="fixed top-0 left-0 w-full flex items-center justify-between px-12 py-4 z-50"
+        style="background: rgba(0,0,0,0.4);">
+        <div class="flex items-center gap-3">
+            <img src="logo.svg" alt="Logo" class="h-10 w-10 rounded-full object-cover" id="header-logo">
+            <span class="text-white text-2xl font-bold">Planetario Virtual</span>
+        </div>
+        <nav>
+            <ul class="flex gap-8">
+                <li><a href="#" class="text-white text-xl hover:underline">Home</a></li>
+                <li><a href="../fotos/index.html" class="text-white text-xl hover:underline">Fotos da Nasa</a></li>
+                <li><a href="#" class="text-white text-xl hover:underline">Sobre</a></li>
+                <li><a href="#" class="text-white text-xl hover:underline">SignUp</a></li>
+                <li><a href="#" class="text-white text-xl hover:underline">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="game-container"></div>
+    <script src="astrodados.js"></script>
+    <script>
+        const config = {
+            type: Phaser.AUTO,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            parent: 'game-container',
+            backgroundColor: '#000000',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
 
-        if (orbita) {
-            const direcao = sentidoHorario ? 1 : -1;
+        const game = new Phaser.Game(config);
 
-            astro.orbita = {
-                centro: orbita.centro,
-                raio: orbita.raio,
-                angulo: anguloInicial,
-                velocidade: (orbita.velocidade || 0.01) * direcao
-            };
+        function criarAstro(scene, x, y, tamanho = 50, corHex = 0xffffff, orbita = null, zoom = 3, trilha = 0.5, textura = null, anguloInicial = 0, sentidoHorario = true) {
+            const astro = scene.add.circle(x, y, tamanho, corHex);
+            astro.setInteractive();
+            astro.setFillStyle(corHex, 0);
+            astro.setDepth(1);
 
-            const graphics = scene.add.graphics();
-            graphics.setDepth(-1);
-            graphics.lineStyle(trilha, 0x111111);
+            let sprite = null;
+            if (textura) {
+                sprite = scene.add.image(x, y, textura);
+                sprite.setDisplaySize(tamanho * 2, tamanho * 2);
+                sprite.setDepth(0);
+                sprite.setInteractive();
+            }
 
-            scene.events.on('update', () => {
-                astro.orbita.angulo += astro.orbita.velocidade;
+            astro.on('pointerdown', () => {
+                scene.cameras.main.startFollow(astro);
+                scene.cameras.main.zoomTo(zoom, 5000);
+                const desc = astroDados[textura] || 'Astro Desconhecido';
+                const [titulo, ...resto] = desc.split('\n');
+                scene.planetTitleText.setText(titulo);
+                scene.planetNameText.setText(resto.join('\n'));
+            });
 
-                const cx = astro.orbita.centro.x;
-                const cy = astro.orbita.centro.y;
-                astro.x = cx + Math.cos(astro.orbita.angulo) * astro.orbita.raio;
-                astro.y = cy + Math.sin(astro.orbita.angulo) * astro.orbita.raio;
+            if (orbita) {
+                const direcao = sentidoHorario ? 1 : -1;
 
+                astro.orbita = {
+                    centro: orbita.centro,
+                    raio: orbita.raio,
+                    angulo: anguloInicial,
+                    velocidade: (orbita.velocidade || 0.01) * direcao
+                };
+
+                const graphics = scene.add.graphics();
+                graphics.setDepth(-1);
+                graphics.lineStyle(trilha, 0x111111);
+
+                scene.events.on('update', () => {
+                    astro.orbita.angulo += astro.orbita.velocidade;
+
+                    const cx = astro.orbita.centro.x;
+                    const cy = astro.orbita.centro.y;
+                    astro.x = cx + Math.cos(astro.orbita.angulo) * astro.orbita.raio;
+                    astro.y = cy + Math.sin(astro.orbita.angulo) * astro.orbita.raio;
+
+                    if (sprite) {
+                        sprite.x = astro.x;
+                        sprite.y = astro.y;
+                    }
+
+                    graphics.clear();
+                    graphics.lineStyle(trilha, 0x111111);
+                    graphics.strokeCircle(cx, cy, astro.orbita.raio);
+                });
+
+                astro.x = orbita.centro.x + Math.cos(anguloInicial) * orbita.raio;
+                astro.y = orbita.centro.y + Math.sin(anguloInicial) * orbita.raio;
                 if (sprite) {
                     sprite.x = astro.x;
                     sprite.y = astro.y;
                 }
+            }
 
-                graphics.clear();
-                graphics.lineStyle(trilha, 0x111111);
-                graphics.strokeCircle(cx, cy, astro.orbita.raio);
+            return astro;
+        }
+
+
+        //cinturão de asteroides
+        function criarCinturao(scene, x, y, raioInterno, raioExterno, quantidade) {
+            const graphics = scene.add.graphics();
+            graphics.setDepth(-5); // manter no fundo
+
+            for (let i = 0; i < quantidade; i++) {
+                const angulo = Phaser.Math.FloatBetween(0, Math.PI * 2);
+                const distancia = Phaser.Math.FloatBetween(raioInterno, raioExterno);
+                const tamanho = Phaser.Math.Between(1, 3); // lado do quadrado
+
+                const t = Phaser.Math.FloatBetween(0, 1);
+                const cor = Phaser.Display.Color.Interpolate.ColorWithColor(
+                    new Phaser.Display.Color(90, 56, 37),  // marrom
+                    new Phaser.Display.Color(153, 153, 153), // cinza
+                    100,
+                    t * 100
+                );
+                const corHex = Phaser.Display.Color.GetColor(cor.r, cor.g, cor.b);
+
+                const ax = x + Math.cos(angulo) * distancia;
+                const ay = y + Math.sin(angulo) * distancia;
+
+                graphics.fillStyle(corHex, 1);
+                graphics.fillRect(ax - tamanho / 2, ay - tamanho / 2, tamanho, tamanho);
+            }
+
+            const container = scene.add.container(x, y, [graphics]);
+            container.setDepth(-5);
+
+            scene.events.on('update', () => {
+                container.rotation += 0.0005; // você pode inverter o sentido com -0.0005
             });
 
-            astro.x = orbita.centro.x + Math.cos(anguloInicial) * orbita.raio;
-            astro.y = orbita.centro.y + Math.sin(anguloInicial) * orbita.raio;
-            if (sprite) {
-                sprite.x = astro.x;
-                sprite.y = astro.y;
-            }
+            return container;
         }
 
-        return astro;
-    }
-
-
-    //cinturão de asteroides
-    function criarCinturao(scene, x, y, raioInterno, raioExterno, quantidade) {
-        const graphics = scene.add.graphics();
-        graphics.setDepth(-5); // manter no fundo
-
-        for (let i = 0; i < quantidade; i++) {
-            const angulo = Phaser.Math.FloatBetween(0, Math.PI * 2);
-            const distancia = Phaser.Math.FloatBetween(raioInterno, raioExterno);
-            const tamanho = Phaser.Math.Between(1, 3); // lado do quadrado
-
-            const t = Phaser.Math.FloatBetween(0, 1);
-            const cor = Phaser.Display.Color.Interpolate.ColorWithColor(
-                new Phaser.Display.Color(90, 56, 37),  // marrom
-                new Phaser.Display.Color(153, 153, 153), // cinza
-                100,
-                t * 100
-            );
-            const corHex = Phaser.Display.Color.GetColor(cor.r, cor.g, cor.b);
-
-            const ax = x + Math.cos(angulo) * distancia;
-            const ay = y + Math.sin(angulo) * distancia;
-
-            graphics.fillStyle(corHex, 1);
-            graphics.fillRect(ax - tamanho / 2, ay - tamanho / 2, tamanho, tamanho);
-        }
-
-        const container = scene.add.container(x, y, [graphics]);
-        container.setDepth(-5);
-
-        scene.events.on('update', () => {
-            container.rotation += 0.0005; // você pode inverter o sentido com -0.0005
-        });
-
-        return container;
-    }
 
 
 
@@ -159,40 +164,39 @@
 
 
 
+        function preload() {
+            const graphics = this.add.graphics({ lineStyle: { width: 5, color: 0xffffff } });
+            graphics.fillStyle(0xffffff, 1);
+            graphics.lineBetween(15, 30, 0, 50);
+            graphics.strokeCircle(25, 18, 15);
+            //graphics.lineBetween(20, 18, 30, 18);
+            graphics.generateTexture('buttonZoomText', 50, 50);
+            graphics.destroy();
 
-    function preload() {
-        const graphics = this.add.graphics({ lineStyle: { width: 5, color: 0xffffff } });
-        graphics.fillStyle(0xffffff, 1);
-        graphics.lineBetween(15, 30, 0, 50);
-        graphics.strokeCircle(25, 18, 15);
-        //graphics.lineBetween(20, 18, 30, 18);
-        graphics.generateTexture('buttonZoomText', 50, 50);
-        graphics.destroy();
-
-        const graphics2 = this.add.graphics({ lineStyle: { width: 10, color: 0xffffff } });
-        graphics2.fillStyle(0xffffff, 1);
-        graphics2.strokeRect(0, 0, 50, 50);
-        graphics2.fillStyle(0x000000, 1);
-        graphics2.fillRect(0, 15, 50, 20);
-        graphics2.fillRect(15, 0, 20, 50);
-        graphics2.generateTexture('fullScreen', 50, 50);
-        graphics2.destroy();
+            const graphics2 = this.add.graphics({ lineStyle: { width: 10, color: 0xffffff } });
+            graphics2.fillStyle(0xffffff, 1);
+            graphics2.strokeRect(0, 0, 50, 50);
+            graphics2.fillStyle(0x000000, 1);
+            graphics2.fillRect(0, 15, 50, 20);
+            graphics2.fillRect(15, 0, 20, 50);
+            graphics2.generateTexture('fullScreen', 50, 50);
+            graphics2.destroy();
 
 
-        this.load.image('sol', 'astro/Sol.png')
-        this.load.image('mercurio', 'astro/Mercurio.png');
-        this.load.image('venus', 'astro/Venus.png');
-        this.load.image('terra', 'astro/Terra.png');
+            this.load.image('sol', 'astro/Sol.png')
+            this.load.image('mercurio', 'astro/Mercurio.png');
+            this.load.image('venus', 'astro/Venus.png');
+            this.load.image('terra', 'astro/Terra.png');
             this.load.image('lua', 'astro/lua.png');
-        this.load.image('marte', 'astro/Marte.png');
+            this.load.image('marte', 'astro/Marte.png');
             this.load.image('fobos', 'astro/fobos.png');
             this.load.image('deimos', 'astro/deimos.png');
-        this.load.image('jupiter', 'astro/Jupiter.png');
+            this.load.image('jupiter', 'astro/Jupiter.png');
             this.load.image('io', 'astro/io.png');
             this.load.image('europa', 'astro/europa.png');
             this.load.image('ganymedes', 'astro/ganymedes.png');
             this.load.image('calisto', 'astro/calisto.png');
-        this.load.image('saturno', 'astro/Saturno.png');
+            this.load.image('saturno', 'astro/Saturno.png');
             this.load.image('mimas', 'astro/mimas.png');
             this.load.image('encelado', 'astro/encelado.png');
             this.load.image('tetis', 'astro/tetis.png');
@@ -200,69 +204,69 @@
             this.load.image('reia', 'astro/reia.png');
             this.load.image('tita', 'astro/tita.png');
             this.load.image('japeto', 'astro/japeto.png');
-        this.load.image('urano', 'astro/Urano.png');
+            this.load.image('urano', 'astro/Urano.png');
             this.load.image('miranda', 'astro/miranda.png');
             this.load.image('ariel', 'astro/ariel.png');
             this.load.image('umbriel', 'astro/umbriel.png');
             this.load.image('titania', 'astro/titania.png');
             this.load.image('oberon', 'astro/oberon.png');
-        this.load.image('netuno', 'astro/Netuno.png');
+            this.load.image('netuno', 'astro/Netuno.png');
             this.load.image('tritao', 'astro/tritao.png');
             this.load.image('nereida', 'astro/nereida.png');
-        this.load.image('plutao', 'astro/Plutao.png');
+            this.load.image('plutao', 'astro/Plutao.png');
             this.load.image('caronte', 'astro/caronte.png');
 
 
-        
-    }
 
-    function create() {
+        }
 
-        //CAMERA
-        const spaceSize = 3000;
-        this.cameras.main.setBounds(-spaceSize/2, -spaceSize/2, spaceSize, spaceSize);
+        function create() {
 
-        //posição inicial da camera
-        this.cameras.main.centerOn(0, 150);
+            //CAMERA
+            const spaceSize = 3000;
+            this.cameras.main.setBounds(-spaceSize / 2, -spaceSize / 2, spaceSize, spaceSize);
 
-        this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
-        const cam = this.cameras.main;
-        cam.zoom *= deltaY > 0 ? 0.9 : 1.1;
-        cam.zoom = Phaser.Math.Clamp(cam.zoom, 1, 800); // limita o zoom
-        });
+            //posição inicial da camera
+            this.cameras.main.centerOn(0, 150);
 
-        this.isDragging = false;
-        this.dragStart = { x: 0, y: 0 };
-
-        this.input.on('pointerdown', (pointer) => {
-        if (pointer.rightButtonDown()) return; // ignora botão direito
-        this.isDragging = true;
-        this.dragStart.x = pointer.x;
-        this.dragStart.y = pointer.y;
-        });
-
-        this.input.on('pointerup', () => {
-        this.isDragging = false;
-        });
-
-        this.input.on('pointerdown', (pointer, objetos) => {
-            if (objetos.length === 0) {
-                this.cameras.main.stopFollow();
-                this.planetTitleText.setText('Sistema solar');
-                this.planetNameText.setText(
-                    'localização: via lactea\n' +
-                    'diâmetro: 18.000.000.000 km\n' +
-                    'planetas: 8\n' +
-                    'planetas anões: 5\n' +
-                    'luas: 290\n' +
-                    'cometas: 4017\n' +
-                    'asteroides: 778.897'
-                );
-            }
+            this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
+                const cam = this.cameras.main;
+                cam.zoom *= deltaY > 0 ? 0.9 : 1.1;
+                cam.zoom = Phaser.Math.Clamp(cam.zoom, 1, 800); // limita o zoom
             });
-        
-        //ESTRELAS
-        for (let i = 0; i < 1800; i++) {
+
+            this.isDragging = false;
+            this.dragStart = { x: 0, y: 0 };
+
+            this.input.on('pointerdown', (pointer) => {
+                if (pointer.rightButtonDown()) return; // ignora botão direito
+                this.isDragging = true;
+                this.dragStart.x = pointer.x;
+                this.dragStart.y = pointer.y;
+            });
+
+            this.input.on('pointerup', () => {
+                this.isDragging = false;
+            });
+
+            this.input.on('pointerdown', (pointer, objetos) => {
+                if (objetos.length === 0) {
+                    this.cameras.main.stopFollow();
+                    this.planetTitleText.setText('Sistema solar');
+                    this.planetNameText.setText(
+                        'localização: via lactea\n' +
+                        'diâmetro: 18.000.000.000 km\n' +
+                        'planetas: 8\n' +
+                        'planetas anões: 5\n' +
+                        'luas: 290\n' +
+                        'cometas: 4017\n' +
+                        'asteroides: 778.897'
+                    );
+                }
+            });
+
+            //ESTRELAS
+            for (let i = 0; i < 1800; i++) {
                 const x = Phaser.Math.Between(0, spaceSize);
                 const y = Phaser.Math.Between(0, spaceSize);
                 const size = Phaser.Math.Between(1, 2);
@@ -270,23 +274,23 @@
 
             }
 
-        //ASTROS
-        const astroVel = 0.01;
-        const moonTrace = 0.05
-        const sol = criarAstro(this, 0, 0, 100, 0xffff00, null, 3, 0.5, 'sol');
-        const mercurio = criarAstro(this, 0, 0, 5, 0xffffff, { centro: sol, raio: 120, velocidade: astroVel * 1.61 }, 40, moonTrace * 10, 'mercurio', 25);
-        const venus = criarAstro(this, 0, 0, 10, 0xffa500, { centro: sol, raio: 150, velocidade: astroVel * 1.17 }, 30, moonTrace * 10, 'venus', 90);
-        const terra = criarAstro(this, 0, 0, 10, 0x0000ff, { centro: sol, raio: 200, velocidade: astroVel }, 30, moonTrace * 10, 'terra', 50);
+            //ASTROS
+            const astroVel = 0.01;
+            const moonTrace = 0.05
+            const sol = criarAstro(this, 0, 0, 100, 0xffff00, null, 3, 0.5, 'sol');
+            const mercurio = criarAstro(this, 0, 0, 5, 0xffffff, { centro: sol, raio: 120, velocidade: astroVel * 1.61 }, 40, moonTrace * 10, 'mercurio', 25);
+            const venus = criarAstro(this, 0, 0, 10, 0xffa500, { centro: sol, raio: 150, velocidade: astroVel * 1.17 }, 30, moonTrace * 10, 'venus', 90);
+            const terra = criarAstro(this, 0, 0, 10, 0x0000ff, { centro: sol, raio: 200, velocidade: astroVel }, 30, moonTrace * 10, 'terra', 50);
             const lua = criarAstro(this, 0, 0, 2, 0xffffff, { centro: terra, raio: 20, velocidade: 0.01 }, 90, moonTrace, 'lua', 60);
-        const marte = criarAstro(this, 0, 0, 8, 0xff0000, { centro: sol, raio: 250, velocidade: astroVel * 0.81 }, 30, 0.5, 'marte', 80);
+            const marte = criarAstro(this, 0, 0, 8, 0xff0000, { centro: sol, raio: 250, velocidade: astroVel * 0.81 }, 30, 0.5, 'marte', 80);
             const fobos = criarAstro(this, 0, 0, 2, 0x884444, { centro: marte, raio: 15, velocidade: 0.02 }, 90, moonTrace, 'fobos');
             const deimos = criarAstro(this, 0, 0, 2, 0xeeeeee, { centro: marte, raio: 20, velocidade: 0.015 }, 90, moonTrace, 'deimos');
-        const jupiter = criarAstro(this, 0, 0, 20, 0xffa500, { centro: sol, raio: 350, velocidade: astroVel * 0.44 }, 20, moonTrace * 10, 'jupiter', 45);
+            const jupiter = criarAstro(this, 0, 0, 20, 0xffa500, { centro: sol, raio: 350, velocidade: astroVel * 0.44 }, 20, moonTrace * 10, 'jupiter', 45);
             const io = criarAstro(this, 0, 0, 2, 0xf4c542, { centro: jupiter, raio: 25, velocidade: astroVel * 0.58 }, 90, moonTrace, 'io');
             const europa = criarAstro(this, 0, 0, 2, 0xdbe4ff, { centro: jupiter, raio: 30, velocidade: astroVel * 0.46 }, 90, moonTrace, 'europa', 45);
             const ganymedes = criarAstro(this, 0, 0, 2, 0xa9a9a9, { centro: jupiter, raio: 35, velocidade: astroVel * 0.37 }, 90, moonTrace, 'ganymedes', 90);
             const calisto = criarAstro(this, 0, 0, 2, 0x5c5c5c, { centro: jupiter, raio: 40, velocidade: astroVel * 0.28 }, 90, moonTrace, 'calisto', 180);
-        const saturno = criarAstro(this, 0, 0, 25, 0xc2b280, { centro: sol, raio: 440, velocidade: astroVel * 0.33 }, 20, moonTrace * 10, 'saturno');
+            const saturno = criarAstro(this, 0, 0, 25, 0xc2b280, { centro: sol, raio: 440, velocidade: astroVel * 0.33 }, 20, moonTrace * 10, 'saturno');
             const mimas = criarAstro(this, 0, 0, 2, 0xa9a9a9, { centro: saturno, raio: 18, velocidade: astroVel * 0.48 }, 90, moonTrace, 'mimas');
             const encélado = criarAstro(this, 0, 0, 2, 0xddeeff, { centro: saturno, raio: 22, velocidade: astroVel * 0.42 }, 90, moonTrace, 'encelado', 45);
             const tétis = criarAstro(this, 0, 0, 2, 0xc0c0c0, { centro: saturno, raio: 26, velocidade: astroVel * 0.38 }, 90, moonTrace, 'tetis', 90);
@@ -294,240 +298,232 @@
             const reia = criarAstro(this, 0, 0, 2, 0xcccccc, { centro: saturno, raio: 34, velocidade: astroVel * 0.29 }, 90, moonTrace, 'reia', 180);
             const titã = criarAstro(this, 0, 0, 2, 0xd8b365, { centro: saturno, raio: 38, velocidade: astroVel * 0.19 }, 90, moonTrace, 'tita', 320);
             const japeto = criarAstro(this, 0, 0, 2, 0x8b7355, { centro: saturno, raio: 41, velocidade: astroVel * 0.11 }, 90, moonTrace, 'japeto', 20);
-        const urano = criarAstro(this, 0, 0, 12, 0x00ffff, { centro: sol, raio: 550, velocidade: astroVel * 0.23 }, 20, moonTrace * 10, 'urano', 30);
+            const urano = criarAstro(this, 0, 0, 12, 0x00ffff, { centro: sol, raio: 550, velocidade: astroVel * 0.23 }, 20, moonTrace * 10, 'urano', 30);
             const miranda = criarAstro(this, 0, 0, 2, 0xd8d8d8, { centro: urano, raio: 15, velocidade: astroVel * 0.22 }, 90, moonTrace, 'miranda', 45);
             const ariel = criarAstro(this, 0, 0, 2, 0xdcdcdc, { centro: urano, raio: 18, velocidade: astroVel * 0.18 }, 90, moonTrace, 'ariel', 90);
             const umbriel = criarAstro(this, 0, 0, 2, 0x808080, { centro: urano, raio: 20, velocidade: astroVel * 0.16 }, 90, moonTrace, 'umbriel', 120);
             const titânia = criarAstro(this, 0, 0, 2, 0x999999, { centro: urano, raio: 20, velocidade: astroVel * 0.12 }, 90, moonTrace, 'titania', 180);
             const oberon = criarAstro(this, 0, 0, 2, 0xa9a9a9, { centro: urano, raio: 30, velocidade: astroVel * 0.11 }, 90, moonTrace, 'oberon', 300);
-        const netuno = criarAstro(this, 0, 0, 10, 0x00008b, { centro: sol, raio: 650, velocidade: astroVel * 0.18 }, 20, moonTrace * 10, 'netuno', 300);
+            const netuno = criarAstro(this, 0, 0, 10, 0x00008b, { centro: sol, raio: 650, velocidade: astroVel * 0.18 }, 20, moonTrace * 10, 'netuno', 300);
             const tritão = criarAstro(this, 0, 0, 2, 0xb0e0e6, { centro: netuno, raio: 20, velocidade: astroVel * 0.15 }, 90, moonTrace, 'tritao', 180, false);
-        
-        const asteroides = criarCinturao(this, 0, 0, 280, 320, 200);
-        const kuiper = criarCinturao(this, 0, 0, 700, 800, 600);
 
-        const sistema_plutão = criarAstro(this, 0, 0, 5, 0x8b0000, { centro: sol, raio: 750, velocidade: astroVel * 0.1 }, 20, moonTrace * 10);
+            const asteroides = criarCinturao(this, 0, 0, 280, 320, 200);
+            const kuiper = criarCinturao(this, 0, 0, 700, 800, 600);
+
+            const sistema_plutão = criarAstro(this, 0, 0, 5, 0x8b0000, { centro: sol, raio: 750, velocidade: astroVel * 0.1 }, 20, moonTrace * 10);
             const plutão = criarAstro(this, 0, 0, 5, 0x8b0000, { centro: sistema_plutão, raio: 5, velocidade: astroVel * 1 }, 90, moonTrace, 'plutao');
             const caronte = criarAstro(this, 0, 0, 2, 0x8b0000, { centro: sistema_plutão, raio: 10, velocidade: astroVel * 1 }, 90, moonTrace, 'caronte', 90);
 
-        //hud
-        const hudCamera = this.cameras.add(0, 0, this.scale.width, this.scale.height, false, 'hudCamera');
-        hudCamera.setScroll(0, 0);
-        hudCamera.ignore(this.children.list);
+            //hud
+            const hudCamera = this.cameras.add(0, 0, this.scale.width, this.scale.height, false, 'hudCamera');
+            hudCamera.setScroll(0, 0);
+            hudCamera.ignore(this.children.list);
 
-        const right = this.scale.width;
-        const bottom = this.scale.height;
+            const right = this.scale.width;
+            const bottom = this.scale.height;
 
-        const buttonFullScreen = this.add.image(right - 80, bottom - 45, 'fullScreen').setInteractive().setScrollFactor(0);
-        this.cameras.main.ignore(buttonFullScreen);
+            const buttonFullScreen = this.add.image(right - 80, bottom - 45, 'fullScreen').setInteractive().setScrollFactor(0);
+            this.cameras.main.ignore(buttonFullScreen);
 
-        buttonFullScreen.on('pointerdown', () => {
-            const gameContainer = document.getElementById('game-container');
-            if (!document.fullscreenElement) {
-                if (gameContainer.requestFullscreen) {
-                    gameContainer.requestFullscreen();
-                } else if (gameContainer.mozRequestFullScreen) {
-                    gameContainer.mozRequestFullScreen();
-                } else if (gameContainer.webkitRequestFullscreen) {
-                    gameContainer.webkitRequestFullscreen();
-                } else if (gameContainer.msRequestFullscreen) {
-                    gameContainer.msRequestFullscreen();
+            buttonFullScreen.on('pointerdown', () => {
+                const gameContainer = document.getElementById('game-container');
+                if (!document.fullscreenElement) {
+                    if (gameContainer.requestFullscreen) {
+                        gameContainer.requestFullscreen();
+                    } else if (gameContainer.mozRequestFullScreen) {
+                        gameContainer.mozRequestFullScreen();
+                    } else if (gameContainer.webkitRequestFullscreen) {
+                        gameContainer.webkitRequestFullscreen();
+                    } else if (gameContainer.msRequestFullscreen) {
+                        gameContainer.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
                 }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            }
-        });
+            });
 
-        //botão de fullscreen
-function posicionarBotaoFullScreen() {
-    const right = window.innerWidth;
-    const bottom = window.innerHeight;
-    const footerAltura = 350;
+            //botão de fullscreen
+            function posicionarBotaoFullScreen() {
+                const right = window.innerWidth;
+                const bottom = window.innerHeight;
+                const footerAltura = 350;
 
-    if (document.fullscreenElement) {
-        buttonFullScreen.setPosition(right - 60, bottom - 60);
-    } else {
-        buttonFullScreen.setPosition(right - 80, bottom - footerAltura - 30);
-    }
-}
-
-posicionarBotaoFullScreen();
-
-
-window.addEventListener('resize', posicionarBotaoFullScreen);
-document.addEventListener('fullscreenchange', posicionarBotaoFullScreen);
-document.addEventListener('webkitfullscreenchange', posicionarBotaoFullScreen);
-document.addEventListener('mozfullscreenchange', posicionarBotaoFullScreen);
-document.addEventListener('MSFullscreenChange', posicionarBotaoFullScreen);
-
-
-function resizeGame() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    game.scale.resize(width, height);
-}
-
-window.addEventListener('resize', resizeGame);
-document.addEventListener('fullscreenchange', resizeGame);
-document.addEventListener('webkitfullscreenchange', resizeGame);
-document.addEventListener('mozfullscreenchange', resizeGame);
-document.addEventListener('MSFullscreenChange', resizeGame);
-
-//nome do astro
-this.planetTitleText = this.add.text(40, 120, 'Sistema solar', {
-    fontSize: '32px',
-    fill: '#ffffff',
-    fontStyle: 'bold',
-    fontFamily: 'Courier New, Courier, monospace',
-    resolution: 1
-}).setScrollFactor(0);
-this.planetTitleText.setPadding(0);
-this.planetTitleText.setShadow(0, 0, '#000', 0, false, false);
-this.cameras.main.ignore(this.planetTitleText);
-
-//linha do astro
-this.planetTitleLine = this.add.graphics();
-this.planetTitleLine.lineStyle(2, 0xffffff, 0.8);
-this.planetTitleLine.beginPath();
-this.planetTitleLine.moveTo(40, 158); // x inicial, y logo abaixo do título
-this.planetTitleLine.lineTo(150, 158); // x final (ajuste conforme o tamanho do nome)
-this.planetTitleLine.strokePath();
-this.cameras.main.ignore(this.planetTitleLine);
-
-//descrição do astro
-this.planetNameText = this.add.text(40, 170, '', {
-    fontSize: '22px',
-    fill: '#ffffff',
-    fontFamily: 'Courier New, Courier, monospace',
-    resolution: 1
-}).setScrollFactor(0);
-this.planetNameText.setPadding(0);
-this.planetNameText.setShadow(0, 0, '#000', 0, false, false);
-this.cameras.main.ignore(this.planetNameText);
-
-//botão do zoom
-const buttonZoom = this.add.image(this.scale.width - 60, this.scale.height - 60, 'buttonZoomText').setInteractive().setScrollFactor(0);
-this.cameras.main.ignore(buttonZoom);
-
-buttonZoom.on('pointerdown', () => {
-    this.cameras.main.zoomTo(1, 500);
-});
-
-function posicionarBotaoZoom() {
-    const right = window.innerWidth;
-    const bottom = window.innerHeight;
-    const footerAltura = 350;
-
-    if (document.fullscreenElement) {
-        buttonZoom.setPosition(right - 120, bottom - 60);
-    } else {
-        buttonZoom.setPosition(right - 140, bottom - footerAltura - 30);
-    }
-}
-
-posicionarBotaoZoom();
-
-window.addEventListener('resize', posicionarBotaoZoom);
-document.addEventListener('fullscreenchange', posicionarBotaoZoom);
-document.addEventListener('webkitfullscreenchange', posicionarBotaoZoom);
-document.addEventListener('mozfullscreenchange', posicionarBotaoZoom);
-document.addEventListener('MSFullscreenChange', posicionarBotaoZoom);
-    this.planetTitleText.setText('Sistema solar');
-this.planetNameText.setText(
-  'localização: via lactea\n' +
-  'diâmetro: 18.000.000.000 km\n' +
-  'planetas: 8\n' +
-  'planetas anões: 5\n' +
-  'luas: 290\n' +
-  'cometas: 4017\n' +
-  'asteroides: 778.897'
-);
-this.planetNameText.setFontFamily('Courier New, Courier, monospace'); // Garante a mesma fonte
-    }
-
-    function update() {
-        //CAMERA
-        if (this.isDragging) {
-            const pointer = this.input.activePointer;
-            const dx = this.dragStart.x - pointer.x;
-            const dy = this.dragStart.y - pointer.y;
-            this.cameras.main.scrollX += dx / this.cameras.main.zoom;
-            this.cameras.main.scrollY += dy / this.cameras.main.zoom;
-            this.dragStart.x = pointer.x;
-            this.dragStart.y = pointer.y;
-        }
-
-        //footer no zoom
-        const footer = document.getElementById('main-footer');
-        const right = window.innerWidth;
-        const bottom = window.innerHeight;
-        const footerAltura = 350;
-        if (footer) {
-            if (this.cameras.main.zoom > 2) {
-                footer.style.display = 'none';
-                if (this.buttonFullScreen) {
-                    this.buttonFullScreen.setPosition(right - 60, bottom - 60);
-                }
-            } else {
-                footer.style.display = '';
-                if (this.buttonFullScreen) {
-                    this.buttonFullScreen.setPosition(right - 80, bottom - footerAltura - 30);
+                if (document.fullscreenElement) {
+                    buttonFullScreen.setPosition(right - 60, bottom - 60);
+                } else {
+                    buttonFullScreen.setPosition(right - 80, bottom - footerAltura - 30);
                 }
             }
+
+            posicionarBotaoFullScreen();
+
+
+            window.addEventListener('resize', posicionarBotaoFullScreen);
+            document.addEventListener('fullscreenchange', posicionarBotaoFullScreen);
+            document.addEventListener('webkitfullscreenchange', posicionarBotaoFullScreen);
+            document.addEventListener('mozfullscreenchange', posicionarBotaoFullScreen);
+            document.addEventListener('MSFullscreenChange', posicionarBotaoFullScreen);
+
+
+            function resizeGame() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                game.scale.resize(width, height);
+            }
+
+            window.addEventListener('resize', resizeGame);
+            document.addEventListener('fullscreenchange', resizeGame);
+            document.addEventListener('webkitfullscreenchange', resizeGame);
+            document.addEventListener('mozfullscreenchange', resizeGame);
+            document.addEventListener('MSFullscreenChange', resizeGame);
+
+            //nome do astro
+            this.planetTitleText = this.add.text(40, 120, 'Sistema solar', {
+                fontSize: '32px',
+                fill: '#ffffff',
+                fontStyle: 'bold',
+                fontFamily: 'Courier New, Courier, monospace',
+                resolution: 1
+            }).setScrollFactor(0);
+            this.planetTitleText.setPadding(0);
+            this.planetTitleText.setShadow(0, 0, '#000', 0, false, false);
+            this.cameras.main.ignore(this.planetTitleText);
+
+            //linha do astro
+            this.planetTitleLine = this.add.graphics();
+            this.planetTitleLine.lineStyle(2, 0xffffff, 0.8);
+            this.planetTitleLine.beginPath();
+            this.planetTitleLine.moveTo(40, 158); // x inicial, y logo abaixo do título
+            this.planetTitleLine.lineTo(150, 158); // x final (ajuste conforme o tamanho do nome)
+            this.planetTitleLine.strokePath();
+            this.cameras.main.ignore(this.planetTitleLine);
+
+            //descrição do astro
+            this.planetNameText = this.add.text(40, 170, '', {
+                fontSize: '22px',
+                fill: '#ffffff',
+                fontFamily: 'Courier New, Courier, monospace',
+                resolution: 1
+            }).setScrollFactor(0);
+            this.planetNameText.setPadding(0);
+            this.planetNameText.setShadow(0, 0, '#000', 0, false, false);
+            this.cameras.main.ignore(this.planetNameText);
+
+            //botão do zoom
+            const buttonZoom = this.add.image(this.scale.width - 60, this.scale.height - 60, 'buttonZoomText').setInteractive().setScrollFactor(0);
+            this.cameras.main.ignore(buttonZoom);
+
+            buttonZoom.on('pointerdown', () => {
+                this.cameras.main.zoomTo(1, 500);
+            });
+
+            function posicionarBotaoZoom() {
+                const right = window.innerWidth;
+                const bottom = window.innerHeight;
+                const footerAltura = 350;
+
+                if (document.fullscreenElement) {
+                    buttonZoom.setPosition(right - 120, bottom - 60);
+                } else {
+                    buttonZoom.setPosition(right - 140, bottom - footerAltura - 30);
+                }
+            }
+
+            posicionarBotaoZoom();
+
+            window.addEventListener('resize', posicionarBotaoZoom);
+            document.addEventListener('fullscreenchange', posicionarBotaoZoom);
+            document.addEventListener('webkitfullscreenchange', posicionarBotaoZoom);
+            document.addEventListener('mozfullscreenchange', posicionarBotaoZoom);
+            document.addEventListener('MSFullscreenChange', posicionarBotaoZoom);
+            this.planetTitleText.setText('Sistema solar');
+            this.planetNameText.setText(
+                'localização: via lactea\n' +
+                'diâmetro: 18.000.000.000 km\n' +
+                'planetas: 8\n' +
+                'planetas anões: 5\n' +
+                'luas: 290\n' +
+                'cometas: 4017\n' +
+                'asteroides: 778.897'
+            );
+            this.planetNameText.setFontFamily('Courier New, Courier, monospace'); // Garante a mesma fonte
         }
-    }
-  </script>
-  <footer id="main-footer" class="w-full h-[350px] px-8 bg-[#00000000] text-white text-center text-lg font-semibold fixed left-0 bottom-0 z-[50]">
-    <div class="main-carousel w-full h-auto m-6 btg-green-500">
-        <div class="bg-[#0d0d0d] mr-4 carousel-cell flex justify-center w-[400px] h-[300px] rounded-3xl">ba</div>
-        <div class="bg-[#0d0d0d] mr-4 carousel-cell flex justify-center w-[400px] h-[300px] rounded-3xl">be</div>
-        <div class="bg-[#0d0d0d] mr-4 carousel-cell flex justify-center w-[400px] h-[300px] rounded-3xl">bi</div>
-        <div class="bg-[#0d0d0d] mr-4 carousel-cell flex justify-center w-[400px] h-[300px] rounded-3xl">bo</div>
-        <div class="bg-[#0d0d0d] mr-4 carousel-cell flex justify-center w-[400px] h-[300px] rounded-3xl">bu</div>
-    </div>
-  </footer>
-  <script>
+
+        function update() {
+            //CAMERA
+            if (this.isDragging) {
+                const pointer = this.input.activePointer;
+                const dx = this.dragStart.x - pointer.x;
+                const dy = this.dragStart.y - pointer.y;
+                this.cameras.main.scrollX += dx / this.cameras.main.zoom;
+                this.cameras.main.scrollY += dy / this.cameras.main.zoom;
+                this.dragStart.x = pointer.x;
+                this.dragStart.y = pointer.y;
+            }
+
+            //footer no zoom
+            const footer = document.getElementById('main-footer');
+            const right = window.innerWidth;
+            const bottom = window.innerHeight;
+            const footerAltura = 350;
+            if (footer) {
+                if (this.cameras.main.zoom > 2) {
+                    footer.style.display = 'none';
+                    if (this.buttonFullScreen) {
+                        this.buttonFullScreen.setPosition(right - 60, bottom - 60);
+                    }
+                } else {
+                    footer.style.display = '';
+                    if (this.buttonFullScreen) {
+                        this.buttonFullScreen.setPosition(right - 80, bottom - footerAltura - 30);
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
         var elem = document.querySelector('.main-carousel');
-        var flkty = new Flickity( elem, {
-        // options
-        cellAlign: 'left',
-        contain: false,
-        freeScroll: false,
-        prevNextButtons: true,
-        pageDots: false,
-        wrapAround: true,
-        autoPlay: 10000,
-        
+        var flkty = new Flickity(elem, {
+            // options
+            cellAlign: 'left',
+            contain: false,
+            freeScroll: false,
+            prevNextButtons: true,
+            pageDots: false,
+            wrapAround: true,
+            autoPlay: 10000,
+
         });
 
-        flkty.on('staticClick', function(event, pointer, cellElement, cellIndex) {
+        flkty.on('staticClick', function (event, pointer, cellElement, cellIndex) {
             if (!cellElement) {
                 return;
             }
 
             flkty.select(cellIndex);
-            });
+        });
 
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        fontFamily: {
-                            libre: ["Libre Caslon Text", "serif"]
-                        }
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        libre: ["Libre Caslon Text", "serif"]
                     }
                 }
             }
-            
-        
-        
+        }
+
+
+
     </script>
 </body>
+
 </html>

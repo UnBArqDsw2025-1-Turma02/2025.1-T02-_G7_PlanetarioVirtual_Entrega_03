@@ -18,9 +18,9 @@ export function PostItem({ post, onDelete }: PostItemProps) {
 
 
   const handleDeleteClick = (e: React.MouseEvent) => {
-    e.preventDefault(); 
+    e.preventDefault();
     e.stopPropagation();
-    if (confirm('Tem certeza que deseja excluir esta postagem? Todos os comentários associados também podem ser perdidos.')) {
+    if (confirm('Tem certeza que deseja excluir esta postagem? Todos os comentários associados também serão excluídos.')) {
       onDelete(post.id);
     }
   };
@@ -28,7 +28,7 @@ export function PostItem({ post, onDelete }: PostItemProps) {
   return (
     <div className="bg-gray-800 border border-gray-700 rounded-lg mb-6 overflow-hidden relative">
       {canDelete && (
-        <button 
+        <button
           onClick={handleDeleteClick}
           className="absolute top-4 right-4 p-1.5 rounded-full text-gray-400 hover:bg-red-500/20 hover:text-red-400 z-10 transition-colors"
           title="Excluir postagem"
@@ -37,7 +37,7 @@ export function PostItem({ post, onDelete }: PostItemProps) {
         </button>
       )}
 
-      <Link href={`/postagens/${post.id}`} className="block p-6 hover:bg-gray-700/50 transition-colors duration-200">
+      <div className="block p-6">
         <div className="flex items-center mb-4">
           <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center mr-4 flex-shrink-0">
             <UserIcon className="h-6 w-6 text-gray-400" />
@@ -50,20 +50,16 @@ export function PostItem({ post, onDelete }: PostItemProps) {
           </div>
         </div>
         <p className="text-gray-300 min-h-[40px]">{post.texto}</p>
-      </Link>
-      
-      <div className="bg-gray-800/50 border-t border-gray-700 px-6 py-3 flex justify-between items-center">
-        <div className="flex items-center gap-2 text-gray-400">
-          <MessageCircle size={16} />
-          <span className="text-sm font-medium">{post.comentarios.length} Comentários</span>
-        </div>
-        <Link 
-          href={`/postagens/${post.id}#comentar`}
-          className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-full transition-colors"
-        >
-          Ver / Comentar
-        </Link>
       </div>
+
+      <Link href={`/postagens/${post.id}#comentar`}>
+        <div className="bg-gray-800/50 border-t border-gray-700 px-6 py-3 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200">
+          <div className="flex items-center gap-2 text-gray-400">
+            <MessageCircle size={16} />
+            <span className="text-sm font-medium">Comentários</span>
+          </div>
+        </div>
+      </Link>
     </div>
   );
 }
