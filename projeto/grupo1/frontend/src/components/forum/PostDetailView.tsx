@@ -2,7 +2,8 @@
 import { User as UserIcon, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { createCommentAPI, deleteComment } from '@/services/api';
+
+import { createCommentAPI, deleteCommentAPI } from '@/services/api';
 import type { PostWithComments, Comment as CommentType, User as UserType } from '@/services/api';
 import { CommentForm } from './CommentForm';
 import { toast } from 'react-toastify';
@@ -13,7 +14,7 @@ type PostDetailViewProps = {
 
 export function PostDetailView({ initialPost }: PostDetailViewProps) {
   const [post, setPost] = useState<PostWithComments | null>(initialPost);
-  const { user } = useAuth(); // Usuário logado (do AuthContext)
+  const { user } = useAuth(); 
 
   useEffect(() => {
     setPost(initialPost);
@@ -34,13 +35,9 @@ export function PostDetailView({ initialPost }: PostDetailViewProps) {
     }
 
     try {
-      // Chama a nova função da API, passando o ID do post, o texto do comentário, e o ID do autor
       const novoComentarioDaApi = await createCommentAPI(post.id, commentText, user.id);
-
-      // Atualiza o estado local com o comentário retornado pela API
       setPost(currentPost => {
         if (!currentPost) return null;
-        // Adiciona o novo comentário no início da lista e reordena
         const comentariosAtualizados = [novoComentarioDaApi, ...currentPost.comentarios]
           .sort((a,b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
         return {
@@ -61,22 +58,39 @@ export function PostDetailView({ initialPost }: PostDetailViewProps) {
       toast.warn("Você precisa estar logado para realizar esta ação.");
       return;
     }
-    if (!post) return;
+    if (!post) {
+        toast.error("Não é possível deletar comentário: post não carregado.");
+        return;
+    }
+
+     const confirmDelete = window.confirm('Tem certeza que deseja excluir este comentário?');
+     if (!confirmDelete) {
+       return;
+     }
 
     try {
-      await deleteComment(commentId); // Mocked
-      setPost(currentPost => {
-        if (!currentPost) return null;
-        return {
-          ...currentPost,
-          comentarios: currentPost.comentarios.filter(c => c.id !== commentId)
-        };
-      });
-      toast.success("Comentário deletado com sucesso (mock)!");
+      
+      const resultado = await deleteCommentAPI(commentId, user.id);
+
+      if (resultado.success) {
+        
+        setPost(currentPost => {
+          if (!currentPost) return null;
+          return {
+            ...currentPost,
+            comentarios: currentPost.comentarios.filter(c => c.id !== commentId)
+          };
+        });
+        toast.success("Comentário deletado com sucesso!");
+      } else {
+        
+        toast.error(resultado.message || "Falha ao deletar o comentário.");
+      }
     } catch (error) {
-      const msg = error instanceof Error ? error.message : "Falha desconhecida.";
-      console.error("Erro ao deletar comentário (mock):", error);
-      toast.error(`Falha ao deletar o comentário: ${msg}`);
+        
+        const msg = error instanceof Error ? error.message : "Erro desconhecido ao tentar deletar.";
+        console.error("Erro ao deletar comentário via API:", error);
+        toast.error(`Falha ao deletar o comentário: ${msg}`);
     }
   };
 

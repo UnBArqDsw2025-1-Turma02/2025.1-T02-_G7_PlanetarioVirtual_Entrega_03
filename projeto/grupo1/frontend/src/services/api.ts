@@ -35,7 +35,6 @@ type ApiListPostItem = {
   data_criacao: string;
 };
 
-// Para um comentário individual na resposta da API ao buscar detalhes do post
 type ApiSinglePostCommentItem = {
   id: number;
   conteudo: string;
@@ -45,7 +44,6 @@ type ApiSinglePostCommentItem = {
   nome_autor: string;
 };
 
-// Para a resposta completa da API /api/postagens/{id_post}/comentarios
 type ApiPostAndCommentsResponse = {
   conteudo_post: string;
   postagem_id: number;
@@ -53,19 +51,16 @@ type ApiPostAndCommentsResponse = {
   comentarios: ApiSinglePostCommentItem[];
 };
 
-// Tipo para a resposta da API ao CRIAR um novo comentário
-// Assumindo que a API retorna o comentário criado com uma estrutura similar
 type ApiCreatedCommentResponse = {
-  id: number; // ID do novo comentário
+  id: number;
   conteudo: string;
   autor_id: number;
-  postagem_id: number; // ID do post ao qual o comentário pertence
-  data_criacao: string; // String ISO da data de criação
-  nome_autor: string; // Nome do autor (pode vir da API ou buscamos nos mocks)
+  postagem_id: number;
+  data_criacao: string;
+  nome_autor: string;
 };
 
-
-// --- DADOS MOCKADOS (Usados como fallback ou para encontrar detalhes do autor) ---
+// --- DADOS MOCKADOS ---
 export const initialUsers: User[] = [
   { id: 1, nome: 'Alice Comum', tipo: 'comum' },
   { id: 2, nome: 'Bob Moderador', tipo: 'moderador' },
@@ -74,24 +69,6 @@ export const initialUsers: User[] = [
   { id: 5, nome: 'Eva Cientista', tipo: 'comum' },
   { id: 6, nome: 'Franco Admin', tipo: 'moderador' },
 ];
-
-const MOCK_INITIAL_POSTS_WITH_COMMENTS: PostWithComments[] = [
-  {
-    id: 1,
-    texto: "Olá, pessoal! Estou animado para participar deste fórum.",
-    autor: initialUsers.find(u=> u.id === 1)!,
-    dataCriacao: "2023-10-01T10:00:00Z",
-    comentarios: [
-      {
-        id: 1,
-        texto: "Bem-vinda, Alice! Estamos felizes em tê-la aqui.",
-        autor: initialUsers.find(u=> u.id === 2)!,
-        dataCriacao: "2023-10-01T10:05:00Z",
-      },
-    ],
-  },
-];
-
 
 // --- FUNÇÕES DE API ---
 
@@ -172,29 +149,14 @@ export const getUsers = async (): Promise<User[]> => {
   }
 };
 
-// ATUALIZADA: Função para criar um comentário via API
 export const createCommentAPI = async (postId: number, texto: string, autorId: number): Promise<Comment> => {
-  // A rota informada é /api/comentarios/{id_post}
-  // O prefixo /api já está em API_BASE_URL se você o configurou assim no backend FastAPI
-  // Se o prefixo /api for global para todos os routers no FastAPI, e o router de comentários for só /comentarios/{id_post}
-  // então o endpoint abaixo está correto.
-  // Se o router de comentários tiver seu próprio prefixo, ajuste conforme necessário.
-  const endpoint = `${API_BASE_URL}/api/comentarios/${postId}`; // Endpoint para criar comentário
-
-  console.log(`Frontend: Criando comentário para o post ${postId} em ${endpoint}`);
-
+  const endpoint = `${API_BASE_URL}/api/comentarios/${postId}`;
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        conteudo: texto,
-        autor_id: autorId,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ conteudo: texto, autor_id: autorId }),
     });
-
     if (!response.ok) {
       let errorMessage = `Erro ${response.status} ao criar o comentário.`;
       try {
@@ -204,28 +166,20 @@ export const createCommentAPI = async (postId: number, texto: string, autorId: n
         const textError = await response.text();
         errorMessage = textError || response.statusText || errorMessage;
       }
-      console.error(`Frontend: Erro na API ao criar comentário - Status ${response.status}`, errorMessage);
       throw new Error(errorMessage);
     }
-
     const createdApiComment: ApiCreatedCommentResponse = await response.json();
-    console.log("Frontend: Comentário criado via API:", createdApiComment);
-
     let autorObjeto = initialUsers.find(u => u.id === createdApiComment.autor_id);
     if (!autorObjeto) {
       const nomeAutorDaApi = createdApiComment.nome_autor || "Autor Desconhecido";
       autorObjeto = { id: createdApiComment.autor_id, nome: nomeAutorDaApi, tipo: 'comum' };
     }
-
-    const novoComentario: Comment = {
+    return {
       id: createdApiComment.id,
       texto: createdApiComment.conteudo,
       autor: autorObjeto,
       dataCriacao: new Date(createdApiComment.data_criacao).toISOString(),
     };
-
-    return novoComentario;
-
   } catch (error) {
     console.error("Frontend: Falha crítica ao criar comentário.", error);
     if (error instanceof Error) throw error;
@@ -233,28 +187,59 @@ export const createCommentAPI = async (postId: number, texto: string, autorId: n
   }
 };
 
+// ATUALIZADA: Função para deletar um comentário via API
+export const deleteCommentAPI = async (commentId: number, userId: number): Promise<{ success: boolean; message?: string }> => {
+  const endpoint = `${API_BASE_URL}/api/comentarios/${commentId}/${userId}`;
+  console.log(`Frontend: Deletando comentário ${commentId} pelo usuário ${userId} em ${endpoint}`);
 
-// Funções mockadas restantes (podem ser adaptadas no futuro)
+  try {
+    const response = await fetch(endpoint, {
+      method: 'DELETE',
+      headers: {
+        // Adicione outros cabeçalhos aqui se necessário (ex: Authorization para JWT)
+      },
+    });
+
+    if (!response.ok) {
+      // Tenta extrair uma mensagem de erro do corpo da resposta
+      let errorMessage = `Erro ${response.status} ao deletar o comentário.`;
+      try {
+        const errorData = await response.json(); // A API pode retornar um JSON com 'detail' ou 'message'
+        errorMessage = errorData.detail || errorData.message || errorMessage;
+      } catch (e) {
+        // Se não for JSON, tenta pegar o texto da resposta
+        const textError = await response.text();
+        errorMessage = textError || response.statusText || errorMessage; // Fallback para statusText
+      }
+      console.error(`Frontend: Erro na API ao deletar comentário - Status ${response.status}`, errorMessage);
+      return { success: false, message: errorMessage }; // Retorna sucesso false e a mensagem de erro
+    }
+
+    // Se a API retornar 204 (No Content) ou um JSON de sucesso
+    // Algumas APIs DELETE retornam 204 e corpo vazio, outras podem retornar um JSON.
+    // Se retornar JSON, você pode querer processá-lo aqui.
+    // Ex: const data = await response.json();
+    console.log(`Frontend: Comentário ${commentId} deletado com sucesso via API.`);
+    return { success: true };
+
+  } catch (error) {
+    console.error("Frontend: Falha crítica ao deletar comentário.", error);
+    const message = error instanceof Error ? error.message : "Não foi possível conectar à API para deletar o comentário.";
+    return { success: false, message };
+  }
+};
+
+
+// Funções mockadas restantes
 export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
   console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
   await new Promise(resolve => setTimeout(resolve, 300));
-  const userPosts = MOCK_INITIAL_POSTS_WITH_COMMENTS.filter(p => p.autor.id === userId).map(p => ({
-    id: p.id,
-    texto: p.texto,
-    autor: p.autor,
-    dataCriacao: p.dataCriacao,
-  }));
-  return userPosts.sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
+  // Simula a filtragem de posts mockados
+  return [];
 };
 
 export const deletePost = async (postId: number): Promise<{ success: boolean }> => {
   console.log(`API MOCK: Deletando postagem com ID: ${postId}...`);
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return { success: true };
-};
-
-export const deleteComment = async (commentId: number): Promise<{ success: boolean }> => {
-  console.log(`API MOCK: Deletando comentário com ID: ${commentId}...`);
   await new Promise(resolve => setTimeout(resolve, 300));
   return { success: true };
 };
