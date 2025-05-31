@@ -1,4 +1,4 @@
-import { getPosts, fetchPostContentAndComments, Post, PostWithComments } from '@/services/api';
+import { getPosts, fetchPostWithComments, PostWithComments } from '@/services/api'; 
 import { PostDetailView } from '@/components/forum/PostDetailView';
 
 type PostDetailPageProps = {
@@ -13,38 +13,28 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
   let fetchError: string | null = null;
 
   try {
-
+    
     const allPosts = await getPosts(); 
     const basicPostDetails = allPosts.find(p => p.id === postId);
 
     if (!basicPostDetails) {
-      
-      fetchError = "Postagem não encontrada na listagem inicial.";
-      
+      fetchError = "Postagem base não encontrada na listagem.";
     } else {
       
-      const contentAndComments = await fetchPostContentAndComments(postId);
+      const postWithCommentsFromApi = await fetchPostWithComments(basicPostDetails);
 
-      if (contentAndComments) {
-        finalPostData = {
-          id: basicPostDetails.id,
-          texto: contentAndComments.textoPost, 
-          autor: basicPostDetails.autor,       
-          dataCriacao: basicPostDetails.dataCriacao, 
-          comentarios: contentAndComments.comentarios,
-        };
+      if (postWithCommentsFromApi) {
+        finalPostData = postWithCommentsFromApi;
       } else {
-        fetchError = "Não foi possível carregar os comentários e detalhes finais da postagem.";
+        fetchError = "Não foi possível carregar os comentários e o conteúdo detalhado da postagem.";
       }
     }
   } catch (error) {
-    console.error(`PostDetailPage: Erro ao construir dados para post ${postId}`, error);
+    console.error(`PostDetailPage: Erro ao carregar dados para post ${postId}`, error);
     fetchError = error instanceof Error ? error.message : "Erro desconhecido ao carregar dados da postagem.";
   }
 
-  
   if (!finalPostData) {
-    
     return (
       <div className="text-center p-10">
         <h1 className="text-2xl font-bold text-white">

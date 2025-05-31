@@ -75,9 +75,6 @@ export default function MeuPerfilPage() {
       toast.warn("Você precisa estar logado para realizar esta ação.");
       return;
     }
-    const confirmDelete = window.confirm("Tem certeza que deseja excluir esta postagem e todos os seus comentários?");
-    if (!confirmDelete) return;
-
     try {
       const resultado = await deletePostAPI(postId, user.id);
       if (resultado.success) {
