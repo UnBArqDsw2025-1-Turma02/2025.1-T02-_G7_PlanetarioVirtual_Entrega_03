@@ -2,79 +2,87 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { getPosts, deletePost } from '@/services/api';
+import { getPosts, createPostAPI, deletePostAPI } from '@/services/api';
 import type { Post, User } from '@/services/api';
 import { PostList } from '@/components/forum/PostList';
 import { CreatePostForm } from '@/components/forum/CreatePostForm';
 import { toast } from 'react-toastify';
 
 export default function HomePage() {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    const carregarPostagens = async () => {
-      setIsLoading(true);
-      setErrorMessage(null);
-      try {
-        const postagensRecebidas = await getPosts();
-        setPosts(postagensRecebidas);
+  const carregarPostagens = async () => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      const postagensRecebidas = await getPosts();
+      setPosts(postagensRecebidas.sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime()));
 
-        if (postagensRecebidas.length === 0) {
-          toast.info('Nenhuma postagem encontrada no momento. Seja o primeiro a postar!');
-        } else {
-          toast.success('Postagens carregadas!');
-        }
-      } catch (erro) {
-        const msgErro = erro instanceof Error ? erro.message : 'Falha desconhecida ao carregar postagens.';
-        console.error("HomePage: Erro ao buscar postagens:", msgErro);
-        setErrorMessage(msgErro); 
-        toast.error(`Erro ao carregar o feed: ${msgErro}`); 
-        setPosts([]); 
-      } finally {
-        setIsLoading(false);
+      if (postagensRecebidas.length === 0) {
+        toast.info('Nenhuma postagem encontrada no momento. Seja o primeiro a postar!');
+      } else {
+        console.log('Postagens carregadas via API.');
       }
-    };
-    carregarPostagens();
-  }, []);
+    } catch (erro) {
+      const msgErro = erro instanceof Error ? erro.message : 'Falha desconhecida ao carregar postagens.';
+      console.error("HomePage: Erro ao buscar postagens:", msgErro);
+      setErrorMessage(msgErro);
+      toast.error(`Erro ao carregar o feed: ${msgErro}`);
+      setPosts([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  const handleCreatePost = (postText: string) => {
+  useEffect(() => {
+    carregarPostagens();
+  }, []); 
+
+  const handleCreatePost = async (postText: string) => {
     if (!user) {
       toast.warn('Você precisa estar logado para criar uma postagem.');
       return;
     }
-    // Lógica para criar post (atualmente local, não chama API)
-    // No futuro, você chamaria uma função como `createPostAPI(postText, user.id)`
-    const newPost: Post = {
-      id: Date.now(), // ID temporário, a API geraria o ID real
-      texto: postText,
-      autor: user, // Usuário obtido do contexto de autenticação
-      dataCriacao: new Date().toISOString(),
-    };
-    setPosts(prevPosts => [newPost, ...prevPosts]); // Adiciona o novo post no início da lista
-    toast.success('Postagem criada (localmente) com sucesso!');
+    if (!postText.trim()) {
+      toast.warn("A postagem não pode estar vazia.");
+      return;
+    }
+
+    try {
+      const novoPostDaApi = await createPostAPI(postText, user.id);
+      setPosts(prevPosts => [novoPostDaApi, ...prevPosts]
+        .sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime()));
+      toast.success('Postagem criada com sucesso!');
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Falha desconhecida ao criar postagem.";
+      console.error("Erro ao criar postagem via API na HomePage:", error);
+      toast.error(`Falha ao criar a postagem: ${msg}`);
+    }
   };
 
   const handleDeletePost = async (postId: number) => {
-    // A função deletePost em services/api.ts ainda é mockada.
-    // No futuro, ela faria uma chamada `DELETE` para a API.
-    try {
-      // Simula uma confirmação (você pode usar um modal mais robusto)
-      // const querDeletar = window.confirm("Tem certeza que deseja deletar esta postagem?");
-      // if (!querDeletar) return;
+    if (!user) {
+      toast.warn("Você precisa estar logado para realizar esta ação.");
+      return;
+    }
+    const confirmDelete = window.confirm("Tem certeza que deseja excluir esta postagem e todos os seus comentários?");
+    if (!confirmDelete) return;
 
-      const resultado = await deletePost(postId); // Chama a função (mockada)
+    try {
+      const resultado = await deletePostAPI(postId, user.id);
       if (resultado.success) {
         setPosts(currentPosts => currentPosts.filter(p => p.id !== postId));
-        toast.success('Postagem deletada com sucesso!');
+        toast.success(resultado.message || 'Postagem deletada com sucesso!');
       } else {
-        toast.error('Não foi possível deletar a postagem (operação mockada falhou).');
+        toast.error(resultado.message || 'Não foi possível deletar a postagem.');
       }
-    } catch (erro) {
-      const msgErro = erro instanceof Error ? erro.message : 'Erro desconhecido.';
-      toast.error(`Falha ao deletar postagem: ${msgErro}`);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido ao tentar deletar.';
+      console.error("Erro ao deletar post via API na HomePage:", error);
+      toast.error(`Falha ao deletar postagem: ${msg}`);
     }
   };
 

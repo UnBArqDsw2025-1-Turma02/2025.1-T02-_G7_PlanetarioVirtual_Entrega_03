@@ -1,93 +1,135 @@
-"use client"; 
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-
-import { getPostsByUserId, deletePost } from '@/services/api'; 
-import type { Post, Comment } from '@/services/api'; 
-
+// Importa as novas funções createPostAPI e deletePostAPI
+import { getPostsByUserId, createPostAPI, deletePostAPI } from '@/services/api';
+import type { Post } from '@/services/api'; // Comment não é usado diretamente aqui
 import { PostList } from '@/components/forum/PostList';
 import { CreatePostForm } from '@/components/forum/CreatePostForm';
 import Link from 'next/link';
+import { toast } from 'react-toastify'; // Importa o toast
 
 export default function MeuPerfilPage() {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [myPosts, setMyPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); // Para erros de fetch
 
   useEffect(() => {
     if (!user) {
-      setMyPosts([]); 
+      setMyPosts([]);
       setIsLoading(false);
       return;
     }
-    
+
     const fetchMyPosts = async () => {
       setIsLoading(true);
-      const posts = await getPostsByUserId(user.id);
-      
-      const sortedPosts = [...posts].sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
-      setMyPosts(sortedPosts);
-      setIsLoading(false);
+      setError(null);
+      try {
+        const posts = await getPostsByUserId(user.id); // getPostsByUserId agora usa getPosts
+        // A ordenação já é feita em getPostsByUserId se ela reutiliza getPosts e reordena,
+        // ou se a API já retorna ordenado. Re-ordenar aqui é seguro.
+        const sortedPosts = [...posts].sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
+        setMyPosts(sortedPosts);
+        if (sortedPosts.length === 0) {
+          toast.info("Você ainda não criou nenhuma postagem.");
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "Falha ao carregar suas postagens.";
+        console.error("MeuPerfilPage: Erro ao buscar postagens do usuário:", errorMessage);
+        setError(errorMessage);
+        toast.error(`Erro ao carregar suas postagens: ${errorMessage}`);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchMyPosts();
-  }, [user]); 
+  }, [user]);
 
-  const handleCreatePost = (postText: string) => {
-    if (!user) return;
-    const newPost: Post = {
-      id: Date.now(),
-      texto: postText,
-      autor: user,
-      dataCriacao: new Date().toISOString(),
-    };
-    setMyPosts(prevPosts => [newPost, ...prevPosts]);
-  };
+  const handleCreatePost = async (postText: string) => {
+    if (!user) {
+      toast.warn("Você precisa estar logado para criar uma postagem.");
+      return;
+    }
+    if (!postText.trim()) {
+      toast.warn("A postagem não pode estar vazia.");
+      return;
+    }
 
-  
-  const handleDeletePost = async (postId: number) => {
-    
     try {
-      await deletePost(postId); 
-      setMyPosts(currentPosts => currentPosts.filter(p => p.id !== postId));
+      const novoPostDaApi = await createPostAPI(postText, user.id);
+      // Adiciona o novo post (retornado pela API) no início da lista
+      setMyPosts(prevPosts => [novoPostDaApi, ...prevPosts]
+        .sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime())); // Reordena
+      toast.success("Postagem criada com sucesso!");
     } catch (error) {
-      console.error("Erro ao deletar post (mock) no Meu Perfil:", error);
-      alert("Falha ao deletar a postagem do seu perfil.");
+      const msg = error instanceof Error ? error.message : "Falha desconhecida ao criar postagem.";
+      console.error("Erro ao criar postagem via API no Meu Perfil:", error);
+      toast.error(`Falha ao criar a postagem: ${msg}`);
     }
   };
-  
-  if (!user) {
+
+  const handleDeletePost = async (postId: number) => {
+    if (!user) {
+      toast.warn("Você precisa estar logado para realizar esta ação.");
+      return;
+    }
+    // Opcional: Adicionar um modal de confirmação
+    // const confirmDelete = window.confirm("Tem certeza que deseja excluir esta postagem e todos os seus comentários?");
+    // if (!confirmDelete) return;
+
+    try {
+      const resultado = await deletePostAPI(postId, user.id);
+      if (resultado.success) {
+        setMyPosts(currentPosts => currentPosts.filter(p => p.id !== postId));
+        toast.success(resultado.message || "Postagem deletada com sucesso!");
+      } else {
+        toast.error(resultado.message || "Não foi possível deletar a postagem.");
+      }
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido ao tentar deletar.";
+      console.error("Erro ao deletar post via API no Meu Perfil:", error);
+      toast.error(`Falha ao deletar a postagem: ${msg}`);
+    }
+  };
+
+  if (!user && !isLoading) { // Garante que não mostre "Acesso Negado" enquanto verifica o usuário
     return (
       <div className="text-center p-10">
         <h1 className="text-2xl font-bold text-white">Acesso Negado</h1>
         <p className="text-gray-400 mt-2">
           Você precisa fazer login para acessar esta página.
         </p>
-        <Link href="/login" className="mt-6 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">
+        <Link href="/login" className="mt-6 inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-lg">
           Ir para Login
         </Link>
       </div>
     );
   }
-  
+
   if (isLoading) {
-    return <p className="text-center text-gray-400 p-10">Carregando seu perfil...</p>;
+    return <p className="text-center text-gray-400 p-10">Carregando seu perfil e postagens...</p>;
   }
-  
+
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-8">
       <h1 className="text-3xl font-bold text-white mb-2">Meu Perfil</h1>
-      <p className="text-lg text-blue-400 mb-8">Bem-vindo(a) de volta, {user.nome}!</p>
+      {user && <p className="text-lg text-sky-400 mb-8">Bem-vindo(a) de volta, {user.nome}!</p>}
       
-      <CreatePostForm onPostSubmit={handleCreatePost} />
+      {user && <CreatePostForm onPostSubmit={handleCreatePost} />}
       
       <h2 className="text-2xl font-semibold text-white mt-10 mb-6">Minhas Postagens</h2>
       
-      {myPosts.length > 0 ? (
+      {error && (
+         <p className="text-center text-red-400 bg-red-900/20 p-4 rounded-md my-4">{error}</p>
+      )}
+
+      {!error && myPosts.length > 0 ? (
         <PostList posts={myPosts} onDeletePost={handleDeletePost} />
       ) : (
-        <p className="text-center text-gray-500 bg-gray-800 p-8 rounded-lg">
+        !error && <p className="text-center text-gray-500 bg-gray-800 p-8 rounded-lg">
           Você ainda não fez nenhuma postagem. Crie uma acima!
         </p>
       )}

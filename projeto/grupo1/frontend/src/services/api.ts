@@ -60,14 +60,21 @@ type ApiCreatedCommentResponse = {
   nome_autor: string;
 };
 
+// Tipo para a resposta da API ao CRIAR um novo POST
+type ApiCreatedPostResponse = {
+  id: number; // ID do novo post
+  conteudo: string;
+  autor_id: number;
+  data_criacao: string; // String ISO da data de criação
+  nome_autor: string; // Nome do autor (pode vir da API ou buscamos nos mocks)
+};
+
+
 // --- DADOS MOCKADOS ---
 export const initialUsers: User[] = [
   { id: 1, nome: 'Alice Comum', tipo: 'comum' },
   { id: 2, nome: 'Bob Moderador', tipo: 'moderador' },
-  { id: 3, nome: 'Charlie Curioso', tipo: 'comum' },
-  { id: 4, nome: 'Diana Astrônoma', tipo: 'comum' },
-  { id: 5, nome: 'Eva Cientista', tipo: 'comum' },
-  { id: 6, nome: 'Franco Admin', tipo: 'moderador' },
+  // ... mais usuários
 ];
 
 // --- FUNÇÕES DE API ---
@@ -159,13 +166,8 @@ export const createCommentAPI = async (postId: number, texto: string, autorId: n
     });
     if (!response.ok) {
       let errorMessage = `Erro ${response.status} ao criar o comentário.`;
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.detail || errorData.message || errorMessage;
-      } catch (e) {
-        const textError = await response.text();
-        errorMessage = textError || response.statusText || errorMessage;
-      }
+      try { const errorData = await response.json(); errorMessage = errorData.detail || errorData.message || errorMessage; }
+      catch (e) { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
       throw new Error(errorMessage);
     }
     const createdApiComment: ApiCreatedCommentResponse = await response.json();
@@ -187,59 +189,123 @@ export const createCommentAPI = async (postId: number, texto: string, autorId: n
   }
 };
 
-// ATUALIZADA: Função para deletar um comentário via API
 export const deleteCommentAPI = async (commentId: number, userId: number): Promise<{ success: boolean; message?: string }> => {
   const endpoint = `${API_BASE_URL}/api/comentarios/${commentId}/${userId}`;
-  console.log(`Frontend: Deletando comentário ${commentId} pelo usuário ${userId} em ${endpoint}`);
-
   try {
-    const response = await fetch(endpoint, {
-      method: 'DELETE',
-      headers: {
-        // Adicione outros cabeçalhos aqui se necessário (ex: Authorization para JWT)
-      },
-    });
-
+    const response = await fetch(endpoint, { method: 'DELETE' });
     if (!response.ok) {
-      // Tenta extrair uma mensagem de erro do corpo da resposta
       let errorMessage = `Erro ${response.status} ao deletar o comentário.`;
-      try {
-        const errorData = await response.json(); // A API pode retornar um JSON com 'detail' ou 'message'
-        errorMessage = errorData.detail || errorData.message || errorMessage;
-      } catch (e) {
-        // Se não for JSON, tenta pegar o texto da resposta
-        const textError = await response.text();
-        errorMessage = textError || response.statusText || errorMessage; // Fallback para statusText
-      }
-      console.error(`Frontend: Erro na API ao deletar comentário - Status ${response.status}`, errorMessage);
-      return { success: false, message: errorMessage }; // Retorna sucesso false e a mensagem de erro
+      try { const errorData = await response.json(); errorMessage = errorData.detail || errorData.message || errorMessage; }
+      catch (e) { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
+      return { success: false, message: errorMessage };
     }
-
-    // Se a API retornar 204 (No Content) ou um JSON de sucesso
-    // Algumas APIs DELETE retornam 204 e corpo vazio, outras podem retornar um JSON.
-    // Se retornar JSON, você pode querer processá-lo aqui.
-    // Ex: const data = await response.json();
-    console.log(`Frontend: Comentário ${commentId} deletado com sucesso via API.`);
     return { success: true };
-
   } catch (error) {
-    console.error("Frontend: Falha crítica ao deletar comentário.", error);
     const message = error instanceof Error ? error.message : "Não foi possível conectar à API para deletar o comentário.";
     return { success: false, message };
   }
 };
 
+// NOVA FUNÇÃO: Criar um POST via API
+export const createPostAPI = async (texto: string, autorId: number): Promise<Post> => {
+  const endpoint = `${API_BASE_URL}/api/postagens/`;
+  console.log(`Frontend: Criando post em ${endpoint}`);
 
-// Funções mockadas restantes
-export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
-  console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
-  await new Promise(resolve => setTimeout(resolve, 300));
-  // Simula a filtragem de posts mockados
-  return [];
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Adicionar cabeçalhos de autorização se necessário
+      },
+      body: JSON.stringify({
+        conteudo: texto,
+        autor_id: autorId,
+      }),
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Erro ${response.status} ao criar o post.`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.detail || errorData.message || errorMessage;
+      } catch (e) {
+        const textError = await response.text();
+        errorMessage = textError || response.statusText || errorMessage;
+      }
+      console.error(`Frontend: Erro na API ao criar post - Status ${response.status}`, errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const createdApiPost: ApiCreatedPostResponse = await response.json();
+    console.log("Frontend: Post criado via API:", createdApiPost);
+
+    // Mapeia a resposta da API para o tipo Post do frontend
+    let autorObjeto = initialUsers.find(u => u.id === createdApiPost.autor_id);
+    if (!autorObjeto) {
+      autorObjeto = { id: createdApiPost.autor_id, nome: createdApiPost.nome_autor || "Autor Desconhecido", tipo: 'comum' };
+    }
+
+    const novoPost: Post = {
+      id: createdApiPost.id,
+      texto: createdApiPost.conteudo,
+      autor: autorObjeto,
+      dataCriacao: new Date(createdApiPost.data_criacao).toISOString(),
+    };
+    return novoPost;
+
+  } catch (error) {
+    console.error("Frontend: Falha crítica ao criar post.", error);
+    if (error instanceof Error) throw error;
+    throw new Error("Não foi possível conectar à API para criar o post.");
+  }
 };
 
-export const deletePost = async (postId: number): Promise<{ success: boolean }> => {
-  console.log(`API MOCK: Deletando postagem com ID: ${postId}...`);
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return { success: true };
+// NOVA FUNÇÃO: Deletar um POST via API
+export const deletePostAPI = async (postId: number, userId: number): Promise<{ success: boolean; message?: string }> => {
+  const endpoint = `${API_BASE_URL}/api/postagens/${postId}/${userId}`;
+  console.log(`Frontend: Deletando post ${postId} pelo usuário ${userId} em ${endpoint}`);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'DELETE',
+      headers: {
+        // Adicionar cabeçalhos de autorização se necessário
+      },
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Erro ${response.status} ao deletar o post.`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.detail || errorData.message || errorMessage;
+      } catch (e) {
+        const textError = await response.text();
+        errorMessage = textError || response.statusText || errorMessage;
+      }
+      console.error(`Frontend: Erro na API ao deletar post - Status ${response.status}`, errorMessage);
+      return { success: false, message: errorMessage };
+    }
+
+    // A API retorna uma mensagem de sucesso, podemos usá-la no toast se quisermos
+    const data = await response.json();
+    console.log(`Frontend: Post ${postId} deletado com sucesso via API. Mensagem: ${data.message}`);
+    return { success: true, message: data.message };
+
+  } catch (error) {
+    console.error("Frontend: Falha crítica ao deletar post.", error);
+    const message = error instanceof Error ? error.message : "Não foi possível conectar à API para deletar o post.";
+    return { success: false, message };
+  }
+};
+
+
+// Função mockada restante (pode ser adaptada no futuro)
+export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
+  // TODO: Implementar chamada à API real para buscar posts por usuário se necessário
+  // Por enquanto, pode continuar mockado ou filtrar de `getPosts()`
+  console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
+  const allPosts = await getPosts(); // Reutiliza getPosts para ter dados "reais"
+  return allPosts.filter(p => p.autor.id === userId)
+                 .sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
 };
