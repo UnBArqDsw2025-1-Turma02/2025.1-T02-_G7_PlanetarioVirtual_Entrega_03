@@ -1,7 +1,5 @@
-// URL base da API, configurada via variáveis de ambiente ou com fallback
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
-// --- TIPOS ---
 export type User = {
   id: number;
   nome: string;
@@ -26,7 +24,7 @@ export type PostWithComments = Post & {
   comentarios: Comment[];
 };
 
-// --- TIPOS PARA RESPOSTAS DA API ---
+
 type ApiListPostItem = {
   id: number;
   conteudo: string;
@@ -60,24 +58,21 @@ type ApiCreatedCommentResponse = {
   nome_autor: string;
 };
 
-// Tipo para a resposta da API ao CRIAR um novo POST
+
 type ApiCreatedPostResponse = {
-  id: number; // ID do novo post
+  id: number; 
   conteudo: string;
   autor_id: number;
-  data_criacao: string; // String ISO da data de criação
-  nome_autor: string; // Nome do autor (pode vir da API ou buscamos nos mocks)
+  data_criacao: string; 
+  nome_autor: string; 
 };
 
-
-// --- DADOS MOCKADOS ---
 export const initialUsers: User[] = [
   { id: 1, nome: 'Alice Comum', tipo: 'comum' },
   { id: 2, nome: 'Bob Moderador', tipo: 'moderador' },
-  // ... mais usuários
+  
 ];
 
-// --- FUNÇÕES DE API ---
 
 export const getPosts = async (): Promise<Post[]> => {
   const endpoint = `${API_BASE_URL}/api/postagens/`;
@@ -206,17 +201,16 @@ export const deleteCommentAPI = async (commentId: number, userId: number): Promi
   }
 };
 
-// NOVA FUNÇÃO: Criar um POST via API
+
 export const createPostAPI = async (texto: string, autorId: number): Promise<Post> => {
   const endpoint = `${API_BASE_URL}/api/postagens/`;
-  console.log(`Frontend: Criando post em ${endpoint}`);
 
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Adicionar cabeçalhos de autorização se necessário
+        
       },
       body: JSON.stringify({
         conteudo: texto,
@@ -238,9 +232,7 @@ export const createPostAPI = async (texto: string, autorId: number): Promise<Pos
     }
 
     const createdApiPost: ApiCreatedPostResponse = await response.json();
-    console.log("Frontend: Post criado via API:", createdApiPost);
-
-    // Mapeia a resposta da API para o tipo Post do frontend
+    
     let autorObjeto = initialUsers.find(u => u.id === createdApiPost.autor_id);
     if (!autorObjeto) {
       autorObjeto = { id: createdApiPost.autor_id, nome: createdApiPost.nome_autor || "Autor Desconhecido", tipo: 'comum' };
@@ -261,16 +253,14 @@ export const createPostAPI = async (texto: string, autorId: number): Promise<Pos
   }
 };
 
-// NOVA FUNÇÃO: Deletar um POST via API
 export const deletePostAPI = async (postId: number, userId: number): Promise<{ success: boolean; message?: string }> => {
   const endpoint = `${API_BASE_URL}/api/postagens/${postId}/${userId}`;
-  console.log(`Frontend: Deletando post ${postId} pelo usuário ${userId} em ${endpoint}`);
 
   try {
     const response = await fetch(endpoint, {
       method: 'DELETE',
       headers: {
-        // Adicionar cabeçalhos de autorização se necessário
+        
       },
     });
 
@@ -287,9 +277,8 @@ export const deletePostAPI = async (postId: number, userId: number): Promise<{ s
       return { success: false, message: errorMessage };
     }
 
-    // A API retorna uma mensagem de sucesso, podemos usá-la no toast se quisermos
     const data = await response.json();
-    console.log(`Frontend: Post ${postId} deletado com sucesso via API. Mensagem: ${data.message}`);
+
     return { success: true, message: data.message };
 
   } catch (error) {
@@ -299,13 +288,8 @@ export const deletePostAPI = async (postId: number, userId: number): Promise<{ s
   }
 };
 
-
-// Função mockada restante (pode ser adaptada no futuro)
 export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
-  // TODO: Implementar chamada à API real para buscar posts por usuário se necessário
-  // Por enquanto, pode continuar mockado ou filtrar de `getPosts()`
-  console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
-  const allPosts = await getPosts(); // Reutiliza getPosts para ter dados "reais"
+  const allPosts = await getPosts(); 
   return allPosts.filter(p => p.autor.id === userId)
                  .sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
 };

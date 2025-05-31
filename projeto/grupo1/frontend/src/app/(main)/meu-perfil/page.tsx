@@ -2,19 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-// Importa as novas funções createPostAPI e deletePostAPI
 import { getPostsByUserId, createPostAPI, deletePostAPI } from '@/services/api';
-import type { Post } from '@/services/api'; // Comment não é usado diretamente aqui
+import type { Post } from '@/services/api'; 
 import { PostList } from '@/components/forum/PostList';
 import { CreatePostForm } from '@/components/forum/CreatePostForm';
 import Link from 'next/link';
-import { toast } from 'react-toastify'; // Importa o toast
+import { toast } from 'react-toastify'; 
 
 export default function MeuPerfilPage() {
   const { user } = useAuth();
   const [myPosts, setMyPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); // Para erros de fetch
+  const [error, setError] = useState<string | null>(null); 
 
   useEffect(() => {
     if (!user) {
@@ -27,9 +26,9 @@ export default function MeuPerfilPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const posts = await getPostsByUserId(user.id); // getPostsByUserId agora usa getPosts
-        // A ordenação já é feita em getPostsByUserId se ela reutiliza getPosts e reordena,
-        // ou se a API já retorna ordenado. Re-ordenar aqui é seguro.
+        const posts = await getPostsByUserId(user.id); 
+        
+        
         const sortedPosts = [...posts].sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
         setMyPosts(sortedPosts);
         if (sortedPosts.length === 0) {
@@ -60,9 +59,9 @@ export default function MeuPerfilPage() {
 
     try {
       const novoPostDaApi = await createPostAPI(postText, user.id);
-      // Adiciona o novo post (retornado pela API) no início da lista
+      
       setMyPosts(prevPosts => [novoPostDaApi, ...prevPosts]
-        .sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime())); // Reordena
+        .sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime())); 
       toast.success("Postagem criada com sucesso!");
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Falha desconhecida ao criar postagem.";
@@ -76,9 +75,8 @@ export default function MeuPerfilPage() {
       toast.warn("Você precisa estar logado para realizar esta ação.");
       return;
     }
-    // Opcional: Adicionar um modal de confirmação
-    // const confirmDelete = window.confirm("Tem certeza que deseja excluir esta postagem e todos os seus comentários?");
-    // if (!confirmDelete) return;
+    const confirmDelete = window.confirm("Tem certeza que deseja excluir esta postagem e todos os seus comentários?");
+    if (!confirmDelete) return;
 
     try {
       const resultado = await deletePostAPI(postId, user.id);
@@ -95,7 +93,7 @@ export default function MeuPerfilPage() {
     }
   };
 
-  if (!user && !isLoading) { // Garante que não mostre "Acesso Negado" enquanto verifica o usuário
+  if (!user && !isLoading) { 
     return (
       <div className="text-center p-10">
         <h1 className="text-2xl font-bold text-white">Acesso Negado</h1>
