@@ -4,8 +4,52 @@
       "id": 1,
       "nome": "Milena",
       "tipo": "moderador"
+    },
+    {
+      "id": 2,
+      "nome": "Rafael",
+      "tipo": "comum"
+    },
+    {
+      "id": 3,
+      "nome": "Esdras",
+      "tipo": "comum"
     }
   ],
-  "postagens": [],
-  "comentarios": []
+  "postagens": [
+    {
+      "id": 1,
+      "conteudo": "Postagem Da Milena",
+      "autor_id": 1,
+      "data_criacao": "2025-05-30T15:44:27.798543",
+      "numero_comentarios": 0,
+      "nome_autor": "Milena"
+    },
+    {
+      "id": 2,
+      "conteudo": "Postagem do Rafael",
+      "autor_id": 2,
+      "data_criacao": "2025-05-30T15:44:42.226600",
+      "numero_comentarios": 0,
+      "nome_autor": "Rafael"
+    },
+    {
+      "id": 3,
+      "conteudo": "Postagem do Ed",
+      "autor_id": 3,
+      "data_criacao": "2025-05-30T15:44:51.777920",
+      "numero_comentarios": 0,
+      "nome_autor": "Autor Desconhecido"
+    }
+  ],
+  "comentarios": [
+    {
+      "id": 2,
+      "conteudo": "Rafael feio",
+      "autor_id": 2,
+      "postagem_id": 1,
+      "data_criacao": "2025-05-30T15:47:55.371805",
+      "nome_autor": "Rafael"
+    }
+  ]
 }
