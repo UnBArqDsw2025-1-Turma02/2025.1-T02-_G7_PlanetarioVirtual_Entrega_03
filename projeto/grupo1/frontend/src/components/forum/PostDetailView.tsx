@@ -2,30 +2,22 @@
 import { User as UserIcon, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { createComment, deleteComment } from '@/services/api';
+import { createCommentAPI, deleteComment } from '@/services/api';
 import type { PostWithComments, Comment as CommentType, User as UserType } from '@/services/api';
 import { CommentForm } from './CommentForm';
 import { toast } from 'react-toastify';
 
 type PostDetailViewProps = {
-  initialPost: PostWithComments | null; // Pode ser null se o fetch na page.tsx falhar
+  initialPost: PostWithComments | null;
 };
 
 export function PostDetailView({ initialPost }: PostDetailViewProps) {
   const [post, setPost] = useState<PostWithComments | null>(initialPost);
-  const { user } = useAuth();
+  const { user } = useAuth(); // Usuário logado (do AuthContext)
 
-  // Efeito para atualizar o estado local se initialPost mudar (ex: navegação cliente)
-  // Ou para mostrar um toast se o post não puder ser carregado inicialmente.
   useEffect(() => {
     setPost(initialPost);
-    if (!initialPost) {
-      // Este toast pode ser redundante se a page.tsx já renderizou uma página de erro completa.
-      // Mas pode ser útil se a navegação for client-side no futuro.
-      // toast.error("Não foi possível carregar os detalhes desta postagem.");
-    }
   }, [initialPost]);
-
 
   const handleCommentSubmit = async (commentText: string) => {
     if (!user) {
@@ -36,20 +28,30 @@ export function PostDetailView({ initialPost }: PostDetailViewProps) {
         toast.error("Não é possível adicionar comentário: post não carregado.");
         return;
     }
+    if (!commentText.trim()) {
+        toast.warn("O comentário não pode estar vazio.");
+        return;
+    }
 
     try {
-      const newComment = await createComment(post.id, user, commentText); // Mocked
+      // Chama a nova função da API, passando o ID do post, o texto do comentário, e o ID do autor
+      const novoComentarioDaApi = await createCommentAPI(post.id, commentText, user.id);
+
+      // Atualiza o estado local com o comentário retornado pela API
       setPost(currentPost => {
         if (!currentPost) return null;
+        // Adiciona o novo comentário no início da lista e reordena
+        const comentariosAtualizados = [novoComentarioDaApi, ...currentPost.comentarios]
+          .sort((a,b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
         return {
           ...currentPost,
-          comentarios: [newComment, ...currentPost.comentarios].sort((a,b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime())
+          comentarios: comentariosAtualizados
         };
       });
-      toast.success("Comentário adicionado com sucesso (mock)!");
+      toast.success("Comentário adicionado com sucesso!");
     } catch (error) {
-        const msg = error instanceof Error ? error.message : "Falha desconhecida.";
-        console.error("Erro ao criar comentário (mock):", error);
+        const msg = error instanceof Error ? error.message : "Falha desconhecida ao enviar comentário.";
+        console.error("Erro ao criar comentário via API:", error);
         toast.error(`Falha ao criar o comentário: ${msg}`);
     }
   };
@@ -79,9 +81,6 @@ export function PostDetailView({ initialPost }: PostDetailViewProps) {
   };
 
   if (!post) {
-    // Se o post ainda for null aqui, a página Server Component (PostDetailPage)
-    // já deve ter renderizado uma mensagem de erro ou "não encontrado".
-    // Esta é uma renderização de fallback no cliente.
     return (
       <div className="w-full max-w-4xl mx-auto p-4 sm:p-8">
         <h1 className="text-xl font-semibold text-gray-400 text-center py-10">

@@ -15,7 +15,6 @@ export type Comment = {
   dataCriacao: string;
 };
 
-// Tipo para uma postagem sem seus comentários (usado em listagens)
 export type Post = {
   id: number;
   texto: string;
@@ -23,14 +22,11 @@ export type Post = {
   dataCriacao: string;
 };
 
-// Tipo para uma postagem COM seus comentários (usado na visualização detalhada)
 export type PostWithComments = Post & {
   comentarios: Comment[];
 };
 
 // --- TIPOS PARA RESPOSTAS DA API ---
-
-// Tipo para um item de postagem na listagem da API (/api/postagens/)
 type ApiListPostItem = {
   id: number;
   conteudo: string;
@@ -39,7 +35,7 @@ type ApiListPostItem = {
   data_criacao: string;
 };
 
-// Tipo para um item de comentário na resposta da API de um post específico
+// Para um comentário individual na resposta da API ao buscar detalhes do post
 type ApiSinglePostCommentItem = {
   id: number;
   conteudo: string;
@@ -49,13 +45,25 @@ type ApiSinglePostCommentItem = {
   nome_autor: string;
 };
 
-// Tipo para a resposta completa da API /api/postagens/{id_post}/comentarios
+// Para a resposta completa da API /api/postagens/{id_post}/comentarios
 type ApiPostAndCommentsResponse = {
-  conteudo_post: string; // Conteúdo (texto) do post principal
-  postagem_id: number;   // ID do post principal
+  conteudo_post: string;
+  postagem_id: number;
   numero_comentarios: number;
   comentarios: ApiSinglePostCommentItem[];
 };
+
+// Tipo para a resposta da API ao CRIAR um novo comentário
+// Assumindo que a API retorna o comentário criado com uma estrutura similar
+type ApiCreatedCommentResponse = {
+  id: number; // ID do novo comentário
+  conteudo: string;
+  autor_id: number;
+  postagem_id: number; // ID do post ao qual o comentário pertence
+  data_criacao: string; // String ISO da data de criação
+  nome_autor: string; // Nome do autor (pode vir da API ou buscamos nos mocks)
+};
+
 
 // --- DADOS MOCKADOS (Usados como fallback ou para encontrar detalhes do autor) ---
 export const initialUsers: User[] = [
@@ -85,10 +93,10 @@ const MOCK_INITIAL_POSTS_WITH_COMMENTS: PostWithComments[] = [
 ];
 
 
+// --- FUNÇÕES DE API ---
 
 export const getPosts = async (): Promise<Post[]> => {
   const endpoint = `${API_BASE_URL}/api/postagens/`;
-  console.log(`Frontend: Buscando todas as postagens de ${endpoint}`);
   try {
     const response = await fetch(endpoint);
     if (!response.ok) {
@@ -118,21 +126,14 @@ export const getPosts = async (): Promise<Post[]> => {
 
 export const fetchPostContentAndComments = async (postId: number): Promise<{ textoPost: string; comentarios: Comment[] } | null> => {
   const endpoint = `${API_BASE_URL}/api/postagens/${postId}/comentarios`;
-  console.log(`Frontend: Buscando conteúdo e comentários do post ${postId} de ${endpoint}`);
-
   try {
     const response = await fetch(endpoint);
     if (!response.ok) {
-      if (response.status === 404) {
-        console.warn(`Frontend: Postagem/Comentários para ID ${postId} não encontrados na API (404).`);
-        return null;
-      }
+      if (response.status === 404) return null;
       const errorData = await response.text();
       throw new Error(`Erro ${response.status} ao buscar conteúdo e comentários do post ${postId}: ${errorData}`);
     }
-
     const apiData: ApiPostAndCommentsResponse = await response.json();
-
     const comentariosFormatados: Comment[] = apiData.comentarios.map(apiComment => {
       let autorComentario = initialUsers.find(u => u.id === apiComment.autor_id);
       if (!autorComentario) {
@@ -145,12 +146,10 @@ export const fetchPostContentAndComments = async (postId: number): Promise<{ tex
         dataCriacao: new Date(apiComment.data_criacao).toISOString(),
       };
     });
-
     return {
-      textoPost: apiData.conteudo_post, // Conteúdo atualizado do post
+      textoPost: apiData.conteudo_post,
       comentarios: comentariosFormatados.sort((a,b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime()),
     };
-
   } catch (error) {
     console.error(`Frontend: Falha crítica ao buscar conteúdo e comentários do post ${postId}.`, error);
     if (error instanceof Error) throw error;
@@ -173,6 +172,69 @@ export const getUsers = async (): Promise<User[]> => {
   }
 };
 
+// ATUALIZADA: Função para criar um comentário via API
+export const createCommentAPI = async (postId: number, texto: string, autorId: number): Promise<Comment> => {
+  // A rota informada é /api/comentarios/{id_post}
+  // O prefixo /api já está em API_BASE_URL se você o configurou assim no backend FastAPI
+  // Se o prefixo /api for global para todos os routers no FastAPI, e o router de comentários for só /comentarios/{id_post}
+  // então o endpoint abaixo está correto.
+  // Se o router de comentários tiver seu próprio prefixo, ajuste conforme necessário.
+  const endpoint = `${API_BASE_URL}/api/comentarios/${postId}`; // Endpoint para criar comentário
+
+  console.log(`Frontend: Criando comentário para o post ${postId} em ${endpoint}`);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        conteudo: texto,
+        autor_id: autorId,
+      }),
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Erro ${response.status} ao criar o comentário.`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.detail || errorData.message || errorMessage;
+      } catch (e) {
+        const textError = await response.text();
+        errorMessage = textError || response.statusText || errorMessage;
+      }
+      console.error(`Frontend: Erro na API ao criar comentário - Status ${response.status}`, errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const createdApiComment: ApiCreatedCommentResponse = await response.json();
+    console.log("Frontend: Comentário criado via API:", createdApiComment);
+
+    let autorObjeto = initialUsers.find(u => u.id === createdApiComment.autor_id);
+    if (!autorObjeto) {
+      const nomeAutorDaApi = createdApiComment.nome_autor || "Autor Desconhecido";
+      autorObjeto = { id: createdApiComment.autor_id, nome: nomeAutorDaApi, tipo: 'comum' };
+    }
+
+    const novoComentario: Comment = {
+      id: createdApiComment.id,
+      texto: createdApiComment.conteudo,
+      autor: autorObjeto,
+      dataCriacao: new Date(createdApiComment.data_criacao).toISOString(),
+    };
+
+    return novoComentario;
+
+  } catch (error) {
+    console.error("Frontend: Falha crítica ao criar comentário.", error);
+    if (error instanceof Error) throw error;
+    throw new Error("Não foi possível conectar à API para criar o comentário.");
+  }
+};
+
+
+// Funções mockadas restantes (podem ser adaptadas no futuro)
 export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
   console.log(`API MOCK: Buscando postagens para o usuário ID: ${userId}...`);
   await new Promise(resolve => setTimeout(resolve, 300));
@@ -183,18 +245,6 @@ export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
     dataCriacao: p.dataCriacao,
   }));
   return userPosts.sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
-};
-
-export const createComment = async (postId: number, author: User, text: string): Promise<Comment> => {
-  console.log(`API MOCK: Criando comentário para o post ID: ${postId}...`);
-  await new Promise(resolve => setTimeout(resolve, 300));
-  const newComment: Comment = {
-    id: Date.now(),
-    texto: text,
-    autor: author,
-    dataCriacao: new Date().toISOString(),
-  };
-  return newComment;
 };
 
 export const deletePost = async (postId: number): Promise<{ success: boolean }> => {
