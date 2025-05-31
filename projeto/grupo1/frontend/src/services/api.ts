@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 export type User = {
   id: number;
@@ -24,8 +24,7 @@ export type PostWithComments = Post & {
   comentarios: Comment[];
 };
 
-
-type ApiListPostItem = {
+export type ApiListPostItem = {
   id: number;
   conteudo: string;
   autor_id: number;
@@ -33,7 +32,7 @@ type ApiListPostItem = {
   data_criacao: string;
 };
 
-type ApiSinglePostCommentItem = {
+export type ApiSinglePostCommentItem = {
   id: number;
   conteudo: string;
   autor_id: number;
@@ -42,14 +41,14 @@ type ApiSinglePostCommentItem = {
   nome_autor: string;
 };
 
-type ApiPostAndCommentsResponse = {
+export type ApiPostAndCommentsResponse = {
   conteudo_post: string;
   postagem_id: number;
   numero_comentarios: number;
   comentarios: ApiSinglePostCommentItem[];
 };
 
-type ApiCreatedCommentResponse = {
+export type ApiCreatedCommentResponse = {
   id: number;
   conteudo: string;
   autor_id: number;
@@ -58,13 +57,12 @@ type ApiCreatedCommentResponse = {
   nome_autor: string;
 };
 
-
-type ApiCreatedPostResponse = {
-  id: number; 
+export type ApiCreatedPostResponse = {
+  id: number;
   conteudo: string;
   autor_id: number;
-  data_criacao: string; 
-  nome_autor: string; 
+  data_criacao: string;
+  nome_autor: string;
 };
 
 export const initialUsers: User[] = [
@@ -78,8 +76,14 @@ export const initialUsers: User[] = [
   { id: 8, nome: 'Antônio Júnior', tipo: 'comum' },
   { id: 9, nome: 'Carlos Paz', tipo: 'comum' },
   { id: 10, nome: 'Raphaela Santos', tipo: 'comum' },
-
 ];
+
+import {
+  PostAPIAdapter,
+  CommentAPIAdapter,
+  PostWithCommentsAPIAdapter
+} from './apiAdapters';
+
 
 
 export const getPosts = async (): Promise<Post[]> => {
@@ -91,19 +95,7 @@ export const getPosts = async (): Promise<Post[]> => {
       throw new Error(`Erro ${response.status} ao buscar postagens: ${errorData}`);
     }
     const apiPosts: ApiListPostItem[] = await response.json();
-    const posts: Post[] = apiPosts.map(apiPost => {
-      let autorObjeto = initialUsers.find(u => u.id === apiPost.autor_id);
-      if (!autorObjeto) {
-        autorObjeto = { id: apiPost.autor_id, nome: apiPost.nome_autor, tipo: 'comum' };
-      }
-      return {
-        id: apiPost.id,
-        texto: apiPost.conteudo,
-        autor: autorObjeto,
-        dataCriacao: new Date(apiPost.data_criacao).toISOString(),
-      };
-    });
-    return posts;
+    return apiPosts.map(PostAPIAdapter.toPost);
   } catch (error) {
     console.error("Frontend: Falha crítica ao buscar postagens.", error);
     if (error instanceof Error) throw error;
@@ -111,36 +103,26 @@ export const getPosts = async (): Promise<Post[]> => {
   }
 };
 
-export const fetchPostContentAndComments = async (postId: number): Promise<{ textoPost: string; comentarios: Comment[] } | null> => {
-  const endpoint = `${API_BASE_URL}/api/postagens/${postId}/comentarios`;
+export const fetchPostWithComments = async (
+  basicPostDetails: Post
+): Promise<PostWithComments | null> => {
+  const endpoint = `${API_BASE_URL}/api/postagens/${basicPostDetails.id}/comentarios`;
   try {
     const response = await fetch(endpoint);
     if (!response.ok) {
       if (response.status === 404) return null;
       const errorData = await response.text();
-      throw new Error(`Erro ${response.status} ao buscar conteúdo e comentários do post ${postId}: ${errorData}`);
+      throw new Error(`Erro ${response.status} ao buscar comentários do post ${basicPostDetails.id}: ${errorData}`);
     }
     const apiData: ApiPostAndCommentsResponse = await response.json();
-    const comentariosFormatados: Comment[] = apiData.comentarios.map(apiComment => {
-      let autorComentario = initialUsers.find(u => u.id === apiComment.autor_id);
-      if (!autorComentario) {
-        autorComentario = { id: apiComment.autor_id, nome: apiComment.nome_autor, tipo: 'comum' };
-      }
-      return {
-        id: apiComment.id,
-        texto: apiComment.conteudo,
-        autor: autorComentario,
-        dataCriacao: new Date(apiComment.data_criacao).toISOString(),
-      };
+    return PostWithCommentsAPIAdapter.toPostWithComments(apiData, {
+        autor: basicPostDetails.autor,
+        dataCriacao: basicPostDetails.dataCriacao
     });
-    return {
-      textoPost: apiData.conteudo_post,
-      comentarios: comentariosFormatados.sort((a,b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime()),
-    };
   } catch (error) {
-    console.error(`Frontend: Falha crítica ao buscar conteúdo e comentários do post ${postId}.`, error);
+    console.error(`Frontend: Falha crítica ao buscar comentários do post ${basicPostDetails.id}.`, error);
     if (error instanceof Error) throw error;
-    throw new Error(`Não foi possível conectar à API para buscar detalhes do post ${postId}.`);
+    throw new Error(`Não foi possível conectar à API para buscar detalhes do post ${basicPostDetails.id}.`);
   }
 };
 
@@ -151,7 +133,7 @@ export const getUsers = async (): Promise<User[]> => {
     if (!response.ok) {
       throw new Error(`Erro ${response.status} ao buscar usuários.`);
     }
-    const usersData = await response.json();
+    const usersData: User[] = await response.json();
     return usersData;
   } catch (error) {
     if (error instanceof Error) throw error;
@@ -174,17 +156,7 @@ export const createCommentAPI = async (postId: number, texto: string, autorId: n
       throw new Error(errorMessage);
     }
     const createdApiComment: ApiCreatedCommentResponse = await response.json();
-    let autorObjeto = initialUsers.find(u => u.id === createdApiComment.autor_id);
-    if (!autorObjeto) {
-      const nomeAutorDaApi = createdApiComment.nome_autor || "Autor Desconhecido";
-      autorObjeto = { id: createdApiComment.autor_id, nome: nomeAutorDaApi, tipo: 'comum' };
-    }
-    return {
-      id: createdApiComment.id,
-      texto: createdApiComment.conteudo,
-      autor: autorObjeto,
-      dataCriacao: new Date(createdApiComment.data_criacao).toISOString(),
-    };
+    return CommentAPIAdapter.toCreatedComment(createdApiComment);
   } catch (error) {
     console.error("Frontend: Falha crítica ao criar comentário.", error);
     if (error instanceof Error) throw error;
@@ -209,51 +181,22 @@ export const deleteCommentAPI = async (commentId: number, userId: number): Promi
   }
 };
 
-
 export const createPostAPI = async (texto: string, autorId: number): Promise<Post> => {
   const endpoint = `${API_BASE_URL}/api/postagens/`;
-
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        
-      },
-      body: JSON.stringify({
-        conteudo: texto,
-        autor_id: autorId,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ conteudo: texto, autor_id: autorId }),
     });
-
     if (!response.ok) {
       let errorMessage = `Erro ${response.status} ao criar o post.`;
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.detail || errorData.message || errorMessage;
-      } catch (e) {
-        const textError = await response.text();
-        errorMessage = textError || response.statusText || errorMessage;
-      }
-      console.error(`Frontend: Erro na API ao criar post - Status ${response.status}`, errorMessage);
+      try { const errorData = await response.json(); errorMessage = errorData.detail || errorData.message || errorMessage; }
+      catch (e) { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
       throw new Error(errorMessage);
     }
-
     const createdApiPost: ApiCreatedPostResponse = await response.json();
-    
-    let autorObjeto = initialUsers.find(u => u.id === createdApiPost.autor_id);
-    if (!autorObjeto) {
-      autorObjeto = { id: createdApiPost.autor_id, nome: createdApiPost.nome_autor || "Autor Desconhecido", tipo: 'comum' };
-    }
-
-    const novoPost: Post = {
-      id: createdApiPost.id,
-      texto: createdApiPost.conteudo,
-      autor: autorObjeto,
-      dataCriacao: new Date(createdApiPost.data_criacao).toISOString(),
-    };
-    return novoPost;
-
+    return PostAPIAdapter.toCreatedPost(createdApiPost);
   } catch (error) {
     console.error("Frontend: Falha crítica ao criar post.", error);
     if (error instanceof Error) throw error;
@@ -263,41 +206,25 @@ export const createPostAPI = async (texto: string, autorId: number): Promise<Pos
 
 export const deletePostAPI = async (postId: number, userId: number): Promise<{ success: boolean; message?: string }> => {
   const endpoint = `${API_BASE_URL}/api/postagens/${postId}/${userId}`;
-
+  console.log(`Tentando deletar post ${postId} do usuário ${userId} no endpoint: ${endpoint}`);
   try {
-    const response = await fetch(endpoint, {
-      method: 'DELETE',
-      headers: {
-        
-      },
-    });
-
+    const response = await fetch(endpoint, { method: 'DELETE' });
     if (!response.ok) {
       let errorMessage = `Erro ${response.status} ao deletar o post.`;
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.detail || errorData.message || errorMessage;
-      } catch (e) {
-        const textError = await response.text();
-        errorMessage = textError || response.statusText || errorMessage;
-      }
-      console.error(`Frontend: Erro na API ao deletar post - Status ${response.status}`, errorMessage);
+      try { const errorData = await response.json(); errorMessage = errorData.detail || errorData.message || errorMessage; }
+      catch (e) { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
       return { success: false, message: errorMessage };
     }
-
     const data = await response.json();
-
     return { success: true, message: data.message };
-
   } catch (error) {
-    console.error("Frontend: Falha crítica ao deletar post.", error);
     const message = error instanceof Error ? error.message : "Não foi possível conectar à API para deletar o post.";
     return { success: false, message };
   }
 };
 
 export const getPostsByUserId = async (userId: number): Promise<Post[]> => {
-  const allPosts = await getPosts(); 
+  const allPosts = await getPosts();
   return allPosts.filter(p => p.autor.id === userId)
                  .sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
 };
