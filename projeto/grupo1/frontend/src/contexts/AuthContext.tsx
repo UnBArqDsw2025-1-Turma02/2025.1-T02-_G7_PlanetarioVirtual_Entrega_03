@@ -24,9 +24,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = (tipo: 'comum' | 'moderador') => {
     let userData: User;
     if (tipo === 'moderador') {
-      userData = { id: 2, nome: 'Bob Moderador', tipo: 'moderador' };
+      userData = { id: 1, nome: 'Milena Rocha', tipo: 'moderador' };
     } else {
-      userData = { id: 1, nome: 'Alice Comum', tipo: 'comum' };
+      userData = { id: 2, nome: 'Rafael Pereira', tipo: 'comum' };
     }
     setUser(userData);
     console.log(`Usuário logado como: ${userData.nome} (${userData.tipo})`);

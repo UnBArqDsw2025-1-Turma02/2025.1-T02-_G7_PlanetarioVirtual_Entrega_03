@@ -68,9 +68,17 @@ type ApiCreatedPostResponse = {
 };
 
 export const initialUsers: User[] = [
-  { id: 1, nome: 'Alice Comum', tipo: 'comum' },
-  { id: 2, nome: 'Bob Moderador', tipo: 'moderador' },
-  
+  { id: 1, nome: 'Milena Rocha', tipo: 'moderador' },
+  { id: 2, nome: 'Rafael Pereira', tipo: 'comum' },
+  { id: 3, nome: 'Letícia Santos', tipo: 'comum' },
+  { id: 4, nome: 'Taynara Vitorino', tipo: 'comum' },
+  { id: 5, nome: 'João Lucas', tipo: 'comum' },
+  { id: 6, nome: 'João Pedro', tipo: 'comum' },
+  { id: 7, nome: 'Manoel Moura', tipo: 'comum' },
+  { id: 8, nome: 'Antônio Júnior', tipo: 'comum' },
+  { id: 9, nome: 'Carlos Paz', tipo: 'comum' },
+  { id: 10, nome: 'Raphaela Santos', tipo: 'comum' },
+
 ];
 
 
