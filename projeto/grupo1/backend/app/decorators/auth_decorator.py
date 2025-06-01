@@ -1,3 +1,5 @@
+# app/decorators/factory/verificador_factory.py
+
 from functools import wraps
 from fastapi import HTTPException
 from app.services.forum_service import forum_service
