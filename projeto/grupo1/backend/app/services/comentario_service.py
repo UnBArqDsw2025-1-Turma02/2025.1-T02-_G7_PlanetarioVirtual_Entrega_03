@@ -63,8 +63,24 @@ class CommentService:
 
         self._save_db(db)
         return {"message": f"Comentário {id_comment} excluído com sucesso."}
+    
+    def get_comment_by_id(self, id_comment: int) -> CommentData:
+        db = self._load_db()
+        comentario = next((c for c in db.get("comentarios", []) if c["id"] == id_comment), None)
 
+        if not comentario:
+            raise ValueError(f"Comentário com ID {id_comment} não encontrado.")
 
+        return CommentData(**comentario)
+
+    def get_comment_by_id(self, id_comment: int) -> CommentData:
+        db = self._load_db()
+        comentario = next((c for c in db.get("comentarios", []) if c["id"] == id_comment), None)
+
+        if not comentario:
+            raise ValueError(f"Comentário com ID {id_comment} não encontrado.")
+
+        return CommentData(**comentario)
 
 # Instância global
 comment_service = CommentService()
