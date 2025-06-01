@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: planetario-api
+    env: python
+    plan: free
+    branch: feature/backend
+    rootDir: projeto/grupo1/backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "./start.sh"
+    autoDeploy: true
