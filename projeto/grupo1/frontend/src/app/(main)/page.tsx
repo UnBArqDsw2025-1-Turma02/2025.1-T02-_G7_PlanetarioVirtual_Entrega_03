@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getPosts, createPostAPI, deletePostAPI } from '@/services/api';
-import type { Post, User } from '@/services/api';
+import type { Post } from '@/services/api';
 import { PostList } from '@/components/forum/PostList';
 import { CreatePostForm } from '@/components/forum/CreatePostForm';
 import { toast } from 'react-toastify';

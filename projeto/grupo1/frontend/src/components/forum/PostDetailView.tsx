@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
 import { createCommentAPI, deleteCommentAPI } from '@/services/api';
-import type { PostWithComments, Comment as CommentType, User as UserType } from '@/services/api';
+import type { PostWithComments } from '@/services/api';
 import { CommentForm } from './CommentForm';
 import { toast } from 'react-toastify';
 
