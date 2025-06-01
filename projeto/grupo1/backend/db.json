@@ -149,14 +149,6 @@
       "nome_autor": "Raphaela Santos"
     },
     {
-      "id": 13,
-      "conteudo": "Qual o objeto mais estranho que vocês já aprenderam sobre no espaço? Para mim, são os magnetares. Estrelas de nêutrons com campos magnéticos absurdamente fortes!",
-      "autor_id": 2,
-      "data_criacao": "2025-05-13T15:30:00.990011",
-      "numero_comentarios": 2,
-      "nome_autor": "Rafael Pereira"
-    },
-    {
       "id": 14,
       "conteudo": "Como é que os cientistas medem a distância de estrelas e galáxias tão distantes? Paralaxe, velas padrão... é tudo tão engenhoso!",
       "autor_id": 3,
@@ -303,14 +295,6 @@
       "nome_autor": "João Lucas"
     },
     {
-      "id": 4,
-      "conteudo": "Eu uso o 'NightCap Camera' no iPhone, é pago mas vale a pena para longas exposições. E um mini tripé é essencial!",
-      "autor_id": 1,
-      "postagem_id": 2,
-      "data_criacao": "2025-05-02T14:30:00.111222",
-      "nome_autor": "Milena Rocha"
-    },
-    {
       "id": 5,
       "conteudo": "Tem uns apps para Android como o 'DeepSkyCamera' que são bons também. O segredo é paciência e um local com pouca poluição luminosa.",
       "autor_id": 4,
@@ -380,22 +364,6 @@
       "autor_id": 1,
       "postagem_id": 4,
       "data_criacao": "2025-05-04T18:35:00.111999",
-      "nome_autor": "Milena Rocha"
-    },
-    {
-      "id": 14,
-      "conteudo": "Essa foi de brilhar os olhos! 😂",
-      "autor_id": 6,
-      "postagem_id": 4,
-      "data_criacao": "2025-05-04T18:40:00.222888",
-      "nome_autor": "João Pedro"
-    },
-    {
-      "id": 15,
-      "conteudo": "Imagina que o buraco negro é um triturador de macarrão gigante. Se você chegar muito perto, a parte de você mais próxima dele é puxada MUITO mais forte que a parte mais distante. Aí você vira um espaguete cósmico!",
-      "autor_id": 1,
-      "postagem_id": 5,
-      "data_criacao": "2025-05-05T12:00:00.123123",
       "nome_autor": "Milena Rocha"
     },
     {
@@ -653,22 +621,6 @@
       "postagem_id": 12,
       "data_criacao": "2025-05-12T10:20:00.901901",
       "nome_autor": "Letícia Santos"
-    },
-    {
-      "id": 48,
-      "conteudo": "Sim! E os pulsares também são muito bizarros. Faróis cósmicos girando centenas de vezes por segundo.",
-      "autor_id": 6,
-      "postagem_id": 13,
-      "data_criacao": "2025-05-13T15:35:00.111222",
-      "nome_autor": "João Pedro"
-    },
-    {
-      "id": 49,
-      "conteudo": "Objetos de Thorne-Żytkow, se existirem, também são bem estranhos: uma estrela de nêutrons dentro de uma gigante vermelha!",
-      "autor_id": 9,
-      "postagem_id": 13,
-      "data_criacao": "2025-05-13T15:40:00.333444",
-      "nome_autor": "Carlos Paz"
     },
     {
       "id": 50,

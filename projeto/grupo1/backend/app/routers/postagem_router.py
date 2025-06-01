@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status,Request
 from typing import List
 from ..services.postagem_service import post_service
 from ..models.postagem_model import PostCreate, PostResponse
-from app.decorators.auth_decorator import verificar_moderador_ou_autor_post
+from app.decorators.auth_decorator import VerificadorPermissaoFactory
 
 router = APIRouter(
     prefix="/postagens",
@@ -36,7 +36,7 @@ async def listar_comentarios_por_postagem(id_post: int):
 
 
 @router.delete("/{id_post}/{user_id}")  # ou é o autor
-@verificar_moderador_ou_autor_post
+@VerificadorPermissaoFactory.criar_verificador("post")
 async def delete_post(id_post: int, user_id: int):
     return post_service.delete_post(id_post, user_id)
 
