@@ -1,11 +1,11 @@
-import { getPosts, fetchPostWithComments, PostWithComments } from '@/services/api'; 
+import { getPosts, fetchPostWithComments, PostWithComments } from '@/services/api';
 import { PostDetailView } from '@/components/forum/PostDetailView';
 
-type PostDetailPageProps = {
+interface PostDetailPageProps {
   params: {
     id: string;
   };
-};
+}
 
 export default async function PostDetailPage({ params }: PostDetailPageProps) {
   const postId = Number(params.id);
@@ -13,16 +13,13 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
   let fetchError: string | null = null;
 
   try {
-    
-    const allPosts = await getPosts(); 
+    const allPosts = await getPosts();
     const basicPostDetails = allPosts.find(p => p.id === postId);
 
     if (!basicPostDetails) {
       fetchError = "Postagem base não encontrada na listagem.";
     } else {
-      
       const postWithCommentsFromApi = await fetchPostWithComments(basicPostDetails);
-
       if (postWithCommentsFromApi) {
         finalPostData = postWithCommentsFromApi;
       } else {
@@ -41,7 +38,11 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
           {fetchError ? "Erro ao Carregar Postagem" : "Postagem não encontrada"}
         </h1>
         {fetchError && <p className="text-red-400 mt-2">{fetchError}</p>}
-        {!fetchError && <p className="text-gray-400 mt-2">O link que você seguiu pode estar quebrado ou a postagem foi removida.</p>}
+        {!fetchError && (
+          <p className="text-gray-400 mt-2">
+            O link que você seguiu pode estar quebrado ou a postagem foi removida.
+          </p>
+        )}
       </div>
     );
   }
