@@ -11,7 +11,9 @@ Esta API fornece funcionalidades para gerenciamento de usuários, postagens e co
 **GET** `/api/usuarios/`
 
 **Parâmetros:** Nenhum
+
 **Body:** Nenhum
+
 **Resposta:**
 
 ```json
@@ -31,6 +33,7 @@ Esta API fornece funcionalidades para gerenciamento de usuários, postagens e co
 **POST** `/api/usuarios/`
 
 **Parâmetros:** Nenhum
+
 **Body:**
 
 ```json
@@ -70,14 +73,6 @@ Esta API fornece funcionalidades para gerenciamento de usuários, postagens e co
 }
 ```
 
-ou
-
-```json
-{
-  "message": "Usuário não é moderador."
-}
-```
-
 ---
 
 ## 📝 Postagens
@@ -87,7 +82,9 @@ ou
 **GET** `/api/postagens/`
 
 **Parâmetros:** Nenhum
+
 **Body:** Nenhum
+
 **Resposta:**
 
 ```json
@@ -111,6 +108,7 @@ ou
 **Descrição:** Cria uma nova postagem no sistema.
 
 **Parâmetros:** Nenhum
+
 **Body:**
 
 ```json
@@ -199,7 +197,9 @@ curl -X 'DELETE' \
 **GET** `/api/comentarios/`
 
 **Parâmetros:** Nenhum
+
 **Body:** Nenhum
+
 **Resposta:**
 
 ```json

@@ -22,3 +22,25 @@ def verificar_moderador_ou_autor_post(func):
 
         raise HTTPException(status_code=403, detail="Apenas o autor ou moderador pode excluir esta postagem.")
     return wrapper
+
+from app.services.comentario_service import comment_service
+
+def verificar_moderador_ou_autor_comentario(func):
+    @wraps(func)
+    async def wrapper(id_comentario: int, user_id: int, *args, **kwargs):
+        user = forum_service.get_user_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+
+        if user.tipo == "moderador":
+            return await func(id_comentario=id_comentario, user_id=user_id, *args, **kwargs)
+
+        comentario = comment_service.get_comment_by_id(id_comentario)
+        if not comentario:
+            raise HTTPException(status_code=404, detail="Comentário não encontrado.")
+
+        if comentario.autor_id == user.id:
+            return await func(id_comentario=id_comentario, user_id=user_id, *args, **kwargs)
+
+        raise HTTPException(status_code=403, detail="Apenas o autor ou moderador pode excluir este comentário.")
+    return wrapper
