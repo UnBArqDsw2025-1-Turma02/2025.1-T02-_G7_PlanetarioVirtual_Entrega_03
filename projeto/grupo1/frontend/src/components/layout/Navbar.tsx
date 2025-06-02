@@ -14,7 +14,7 @@ export function Navbar() {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2 text-xl font-bold">
               <Image
-                src="/logo.png" 
+                src="/logo.svg" 
                 alt="Logo Planetário Virtual"
                 width={40} 
                 height={40} 
