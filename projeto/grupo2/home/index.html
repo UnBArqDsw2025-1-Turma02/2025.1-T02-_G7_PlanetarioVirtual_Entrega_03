@@ -227,7 +227,7 @@
             this.cameras.main.setBounds(-spaceSize / 2, -spaceSize / 2, spaceSize, spaceSize);
 
             //posição inicial da camera
-            this.cameras.main.centerOn(0, 150);
+            this.cameras.main.centerOn(0, 0);
 
             this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
                 const cam = this.cameras.main;
@@ -354,13 +354,7 @@
             function posicionarBotaoFullScreen() {
                 const right = window.innerWidth;
                 const bottom = window.innerHeight;
-                const footerAltura = 350;
-
-                if (document.fullscreenElement) {
-                    buttonFullScreen.setPosition(right - 60, bottom - 60);
-                } else {
-                    buttonFullScreen.setPosition(right - 80, bottom - footerAltura - 30);
-                }
+                buttonFullScreen.setPosition(right - 60, bottom - 60);
             }
 
             posicionarBotaoFullScreen();
@@ -428,13 +422,7 @@
             function posicionarBotaoZoom() {
                 const right = window.innerWidth;
                 const bottom = window.innerHeight;
-                const footerAltura = 350;
-
-                if (document.fullscreenElement) {
-                    buttonZoom.setPosition(right - 120, bottom - 60);
-                } else {
-                    buttonZoom.setPosition(right - 140, bottom - footerAltura - 30);
-                }
+                buttonZoom.setPosition(right - 120, bottom - 60);
             }
 
             posicionarBotaoZoom();
@@ -467,25 +455,6 @@
                 this.cameras.main.scrollY += dy / this.cameras.main.zoom;
                 this.dragStart.x = pointer.x;
                 this.dragStart.y = pointer.y;
-            }
-
-            //footer no zoom
-            const footer = document.getElementById('main-footer');
-            const right = window.innerWidth;
-            const bottom = window.innerHeight;
-            const footerAltura = 350;
-            if (footer) {
-                if (this.cameras.main.zoom > 2) {
-                    footer.style.display = 'none';
-                    if (this.buttonFullScreen) {
-                        this.buttonFullScreen.setPosition(right - 60, bottom - 60);
-                    }
-                } else {
-                    footer.style.display = '';
-                    if (this.buttonFullScreen) {
-                        this.buttonFullScreen.setPosition(right - 80, bottom - footerAltura - 30);
-                    }
-                }
             }
         }
     </script>
