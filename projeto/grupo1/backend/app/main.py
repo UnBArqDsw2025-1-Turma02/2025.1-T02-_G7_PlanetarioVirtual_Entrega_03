@@ -1,9 +1,10 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware 
-from .routers import user_router, postagem_router, comentario_router
 import os
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
+from .routers import user_router, postagem_router, comentario_router
 app = FastAPI(
     title="Planetário Virtual API",
     description="API para o backend do fórum do Planetário Virtual.",
