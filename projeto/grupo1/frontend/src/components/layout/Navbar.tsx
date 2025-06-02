@@ -7,6 +7,9 @@ import Image from 'next/image';
 export function Navbar() {
   const { user, logout } = useAuth();
 
+  const planetarioUrl = "https://2025-1-t02-g7-planetario-virtual-en-seven.vercel.app/home/index.html";
+  const fotoDoDiaUrl = "https://2025-1-t02-g7-planetario-virtual-en-seven.vercel.app/fotos/index.html";
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-gray-800 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,28 +17,50 @@ export function Navbar() {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2 text-xl font-bold">
               <Image
-                src="/logo.svg" 
+                src="/logo.svg"
                 alt="Logo Planetário Virtual"
                 width={40} 
                 height={40} 
                 className="h-10 w-auto" 
               />
-              <span>Planetário Virtual</span>
+              <span>Fórum Planetário Virtual</span>
             </Link>
           </div>
+
           <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              <Link href="/" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                Início
-              </Link>
-              <Link href="/usuarios" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                Usuários
-              </Link>
-              <Link href="/meu-perfil" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                Meu Perfil
-              </Link>
+            <div className="ml-10 flex items-center">
+              
+              <div className="flex items-baseline space-x-4">
+                <Link href="/" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                  Início
+                </Link>
+                <Link href="/usuarios" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                  Usuários
+                </Link>
+                <Link href="/meu-perfil" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                  Meu Perfil
+                </Link>
+              </div>
+
+              <span className="mx-4 text-gray-600 hidden lg:inline">|</span>
+
+              <div className="flex items-baseline space-x-4">
+                <Link 
+                  href={planetarioUrl} 
+                  className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-bold text-sky-400 hover:text-sky-300"
+                >
+                  Via Láctea
+                </Link>
+                <Link 
+                  href={fotoDoDiaUrl} 
+                  className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-bold text-sky-400 hover:text-sky-300"
+                >
+                  Foto do Dia
+                </Link>
+              </div>
             </div>
           </div>
+
           <div className="hidden md:block">
             {user ? (
               <div className="flex items-center gap-4">
