@@ -1,26 +1,26 @@
-import { getPosts, fetchPostWithComments, PostWithComments } from '@/services/api'; 
+import { getPosts, fetchPostWithComments, PostWithComments } from '@/services/api';
 import { PostDetailView } from '@/components/forum/PostDetailView';
 
-type PostDetailPageProps = {
-  params: {
-    id: string;
-  };
-};
 
-export default async function PostDetailPage({ params }: PostDetailPageProps) {
-  const postId = Number(params.id);
+export default async function PostDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const {id} = await params;
+
+  
+  const postId = Number(id);
   let finalPostData: PostWithComments | null = null;
   let fetchError: string | null = null;
 
   try {
-    
-    const allPosts = await getPosts(); 
+    const allPosts = await getPosts();
     const basicPostDetails = allPosts.find(p => p.id === postId);
 
     if (!basicPostDetails) {
       fetchError = "Postagem base não encontrada na listagem.";
     } else {
-      
       const postWithCommentsFromApi = await fetchPostWithComments(basicPostDetails);
 
       if (postWithCommentsFromApi) {

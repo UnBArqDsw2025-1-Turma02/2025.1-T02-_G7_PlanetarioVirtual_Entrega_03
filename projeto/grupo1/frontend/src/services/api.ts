@@ -152,7 +152,7 @@ export const createCommentAPI = async (postId: number, texto: string, autorId: n
     if (!response.ok) {
       let errorMessage = `Erro ${response.status} ao criar o comentário.`;
       try { const errorData = await response.json(); errorMessage = errorData.detail || errorData.message || errorMessage; }
-      catch (e) { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
+      catch { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
       throw new Error(errorMessage);
     }
     const createdApiComment: ApiCreatedCommentResponse = await response.json();
@@ -171,7 +171,7 @@ export const deleteCommentAPI = async (commentId: number, userId: number): Promi
     if (!response.ok) {
       let errorMessage = `Erro ${response.status} ao deletar o comentário.`;
       try { const errorData = await response.json(); errorMessage = errorData.detail || errorData.message || errorMessage; }
-      catch (e) { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
+      catch { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
       return { success: false, message: errorMessage };
     }
     return { success: true };
@@ -192,7 +192,7 @@ export const createPostAPI = async (texto: string, autorId: number): Promise<Pos
     if (!response.ok) {
       let errorMessage = `Erro ${response.status} ao criar o post.`;
       try { const errorData = await response.json(); errorMessage = errorData.detail || errorData.message || errorMessage; }
-      catch (e) { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
+      catch { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
       throw new Error(errorMessage);
     }
     const createdApiPost: ApiCreatedPostResponse = await response.json();
@@ -212,7 +212,7 @@ export const deletePostAPI = async (postId: number, userId: number): Promise<{ s
     if (!response.ok) {
       let errorMessage = `Erro ${response.status} ao deletar o post.`;
       try { const errorData = await response.json(); errorMessage = errorData.detail || errorData.message || errorMessage; }
-      catch (e) { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
+      catch { const textError = await response.text(); errorMessage = textError || response.statusText || errorMessage; }
       return { success: false, message: errorMessage };
     }
     const data = await response.json();
