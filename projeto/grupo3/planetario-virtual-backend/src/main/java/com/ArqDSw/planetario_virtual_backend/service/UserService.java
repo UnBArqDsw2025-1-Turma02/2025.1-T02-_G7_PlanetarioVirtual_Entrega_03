@@ -14,6 +14,7 @@ import com.ArqDSw.planetario_virtual_backend.exception.DuplicateEmailException;
 import com.ArqDSw.planetario_virtual_backend.exception.InvalidCredentialsException;
 import com.ArqDSw.planetario_virtual_backend.exception.UserNotFoundException;
 import com.ArqDSw.planetario_virtual_backend.model.User;
+import com.ArqDSw.planetario_virtual_backend.builder.RegisteredUserBuilder; 
 import com.ArqDSw.planetario_virtual_backend.repository.UserRepository;
 
 @Service
@@ -52,10 +53,12 @@ public class UserService {
             throw new DuplicateEmailException("Email already in use: " + userDTO.getEmail());
         }
 
-        User newUser = new User.UserBuilder()
-            .name(userDTO.getName())
-            .email(userDTO.getEmail())
-            .password(passwordEncoder.encode(userDTO.getPassword()))
+
+        User newUser = new RegisteredUserBuilder(
+                userDTO.getName(),
+                userDTO.getEmail(),
+                passwordEncoder.encode(userDTO.getPassword()) 
+            )
             .about(userDTO.getAbout()) 
             .photoURL(userDTO.getPhotoURL()) 
             .build();
