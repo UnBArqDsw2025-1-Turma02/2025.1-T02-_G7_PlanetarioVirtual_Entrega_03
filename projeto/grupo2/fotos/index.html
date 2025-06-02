@@ -20,7 +20,7 @@
             padding: 0;
             height: 100%;
             /* Fundo base escuro, o gradiente adiciona profundidade */
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            background: radial-gradient(ellipse at bottom, #131c25 0%, #000000 100%);
             color: white;
             /* Cor padrão do texto para contraste */
             font-family: sans-serif;
@@ -58,7 +58,7 @@
                 10vw 20vh #FFF, 80vw 30vh #DDD, 30vw 70vh #EEE, 90vw 85vh #FFF,
                 5vw 90vh #FFF, 50vw 10vh #DDD, 70vw 50vh #EEE, 25vw 55vh #FFF,
                 60vw 5vh #FFF, 15vw 45vh #DDD, 95vw 60vh #EEE, 40vw 95vh #FFF;
-            animation: twinkle 7s infinite linear alternate;
+            animation: twinkle 1.5s infinite linear alternate;
         }
 
         /* Camada de estrelas médias */
@@ -73,7 +73,7 @@
                 1900px 300px #DDD, 400px 1600px #FFF, 1000px 1200px #EEE, 1700px 700px #FFF,
                 20vw 80vh #FFF, 75vw 15vh #EEE, 45vw 45vh #FFF, 90vw 5vh #DDD,
                 5vw 50vh #FFF, 60vw 90vh #EEE, 30vw 20vh #FFF, 85vw 65vh #DDD;
-            animation: twinkle 10s infinite linear alternate-reverse;
+            animation: twinkle 2s infinite linear alternate-reverse;
         }
 
         /* Camada de estrelas grandes */
@@ -86,12 +86,12 @@
             box-shadow:
                 500px 800px #FFF, 1500px 200px #EEE, 1000px 1500px #FFF,
                 30vw 50vh #FFF, 70vw 80vh #EEE, 10vw 10vh #FFF, 90vw 30vh #DDD;
-            animation: twinkle 12s infinite linear alternate;
+            animation: twinkle 1s infinite linear alternate;
         }
 
         @keyframes twinkle {
             0% {
-                opacity: 0.3;
+                opacity: 0.0;
             }
 
             50% {
@@ -99,7 +99,7 @@
             }
 
             100% {
-                opacity: 0.3;
+                opacity: 0.0;
             }
         }
     </style>
@@ -128,8 +128,8 @@
         </nav>
     </header>
 
-    <footer id="main-footer"
-        class="w-full h-[700px] px-8 bg-transparent text-white text-center text-lg font-semibold fixed left-0 bottom-0 z-[50] overflow-y-auto"> 
+    <div id="main-footer"
+        class="w-full h-full pt-[100px] px-8 bg-transparent text-white text-center text-lg font-semibold z-[0] overflow-y-auto"> 
         <h1 class="text-[40px] font-bold pb-20 pt-6">Foto do Dia da NASA</h1>
 
         <style>
@@ -148,8 +148,10 @@
 
         <div id="nasa-photo">Carregando...</div>
 
+        <script src="photoProvider.js"></script>
+        <script src="nasaApodAdapter.js"></script>
         <script src="fotododia.js"></script>
-    </footer>
+    </div>
 
 </body>
 </html>

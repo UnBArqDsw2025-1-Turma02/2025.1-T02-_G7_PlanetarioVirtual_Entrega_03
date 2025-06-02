@@ -20,7 +20,7 @@ pressão: ~0 hPa
 água: não
 atividade geológica: antiga
 magnetismo: fraco
-exploração: robótica
+exploração: sobrevoo
 destaque: mais próximo do Sol, dia longo`,
 
     venus: `Vênus
@@ -44,7 +44,7 @@ pressão: ~9.200 hPa
 água: não
 atividade geológica: vulcões
 magnetismo: fraco
-exploração: robótica
+exploração: pouso
 destaque: mais quente, rotação retrógrada`,
 
     terra: `Terra
@@ -55,11 +55,10 @@ localização: 3º planeta
 diâmetro: 12.742 km
 massa: 5,972 x 10²⁴ kg
 gravidade: 9,8 m/s²
-dia: 24h
-ano: 365 dias
+rotação: 24h
+translação: 365 dias
 luas: 1
 anéis: não
-
 
 Ambiente
 temperatura: ±15ºC
@@ -116,7 +115,7 @@ pressão: muito alta
 água: vapor
 atividade geológica: núcleo possível
 magnetismo: muito forte
-exploração: robótica
+exploração: sobrevoo
 destaque: maior planeta, mancha vermelha`,
 
     saturno: `Saturno
@@ -140,7 +139,7 @@ pressão: muito alta
 água: vapor
 atividade geológica: núcleo possível
 magnetismo: forte
-exploração: robótica
+exploração: sobrevoo
 destaque: anéis visíveis, baixa densidade`,
 
     urano: `Urano
@@ -164,7 +163,7 @@ pressão: muito alta
 água: gelo (profundo)
 atividade geológica: possível
 magnetismo: inclinado
-exploração: robótica
+exploração: sobrevoo
 destaque: rotação lateral, azul claro`,
 
     netuno: `Netuno
@@ -188,7 +187,7 @@ pressão: muito alta
 água: gelo (profundo)
 atividade geológica: possível
 magnetismo: inclinado
-exploração: robótica
+exploração: sobrevoo
 destaque: ventos rápidos, azul escuro`,
 
     sol: `Sol
@@ -198,11 +197,8 @@ localização: centro
 diâmetro: 1.391.000 km
 massa: 1,989 x 10³⁰ kg
 gravidade: 274 m/s²
-dia: 25-36 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 25-36 dias
+translação: ~230 milhões de anos (ano galáctico)
 
 Ambiente
 temperatura: ±5.500ºC
@@ -221,11 +217,8 @@ localização: órbita da Terra
 diâmetro: 3.474 km
 massa: 7,35 x 10²² kg
 gravidade: 1,62 m/s²
-dia: 27,3 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 27,3 dias
+translação: 27,3 dias
 
 Ambiente
 temperatura: ±-20ºC a 120ºC
@@ -234,7 +227,7 @@ pressão: ~0 hPa
 água: gelo (polos)
 atividade geológica: antiga
 magnetismo: local
-exploração: humana/robótica
+exploração: humana
 destaque: visitada por humanos`,
 
     fobos: `Fobos
@@ -244,11 +237,8 @@ localização: órbita de Marte
 diâmetro: 22,2 km
 massa: 1,07 x 10¹⁶ kg
 gravidade: 0,0057 m/s²
-dia: 7h 39min
-ano: —
-luas: 0
-anéis: não
-
+rotação: 7h 39min
+translação: 7h 39min
 
 Ambiente
 temperatura: ±-40ºC a -112ºC
@@ -257,7 +247,7 @@ pressão: ~0 hPa
 água: não
 atividade geológica: crateras
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: lua mais próxima de Marte`,
 
     deimos: `Deimos
@@ -267,11 +257,8 @@ localização: órbita de Marte
 diâmetro: 12,4 km
 massa: 1,48 x 10¹⁵ kg
 gravidade: 0,003 m/s²
-dia: 30h 18min
-ano: —
-luas: 0
-anéis: não
-
+rotação: 30h 18min
+translação: 30h 18min
 
 Ambiente
 temperatura: ±-40ºC a -112ºC
@@ -280,7 +267,7 @@ pressão: ~0 hPa
 água: não
 atividade geológica: crateras
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: menor lua de Marte`,
 
     io: `Io
@@ -290,11 +277,8 @@ localização: órbita de Júpiter
 diâmetro: 3.643 km
 massa: 8,93 x 10²² kg
 gravidade: 1,79 m/s²
-dia: 1,77 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 1,77 dias
+translação: 1,77 dias
 
 Ambiente
 temperatura: ±-143ºC
@@ -303,7 +287,7 @@ pressão: muito baixa
 água: não
 atividade geológica: vulcânica intensa
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: mais vulcânica`,
 
     europa: `Europa
@@ -313,11 +297,8 @@ localização: órbita de Júpiter
 diâmetro: 3.122 km
 massa: 4,8 x 10²² kg
 gravidade: 1,31 m/s²
-dia: 3,55 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 3,55 dias
+translação: 3,55 dias
 
 Ambiente
 temperatura: ±-160ºC
@@ -326,7 +307,7 @@ pressão: muito baixa
 água: gelo, oceano (sub)
 atividade geológica: gelo ativo
 magnetismo: induzido
-exploração: robótica
+exploração: sobrevoo
 destaque: oceano subterrâneo`,
 
     ganymedes: `Ganimedes
@@ -336,11 +317,8 @@ localização: órbita de Júpiter
 diâmetro: 5.268 km
 massa: 1,48 x 10²³ kg
 gravidade: 1,43 m/s²
-dia: 7,15 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 7,15 dias
+translação: 7,15 dias
 
 Ambiente
 temperatura: ±-163ºC
@@ -349,7 +327,7 @@ pressão: muito baixa
 água: gelo
 atividade geológica: antiga
 magnetismo: próprio
-exploração: robótica
+exploração: sobrevoo
 destaque: maior lua do sistema`,
 
     calisto: `Calisto
@@ -359,11 +337,8 @@ localização: órbita de Júpiter
 diâmetro: 4.821 km
 massa: 1,08 x 10²³ kg
 gravidade: 1,24 m/s²
-dia: 16,7 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 16,7 dias
+translação: 16,7 dias
 
 Ambiente
 temperatura: ±-139ºC
@@ -372,7 +347,7 @@ pressão: muito baixa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: mais craterada`,
 
     mimas: `Mimas
@@ -382,11 +357,8 @@ localização: órbita de Saturno
 diâmetro: 396 km
 massa: 3,75 x 10¹⁹ kg
 gravidade: 0,064 m/s²
-dia: 0,94 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 0,94 dias
+translação: 0,94 dias
 
 Ambiente
 temperatura: ±-200ºC
@@ -395,7 +367,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: crateras
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: cratera Herschel`,
 
     encelado: `Encélado
@@ -405,11 +377,8 @@ localização: órbita de Saturno
 diâmetro: 504 km
 massa: 1,08 x 10²⁰ kg
 gravidade: 0,113 m/s²
-dia: 1,37 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 1,37 dias
+translação: 1,37 dias
 
 Ambiente
 temperatura: ±-201ºC
@@ -418,7 +387,7 @@ pressão: muito baixa
 água: gelo, jatos
 atividade geológica: ativa
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: jatos de água, oceano interno`,
 
     tetis: `Tétis
@@ -428,11 +397,8 @@ localização: órbita de Saturno
 diâmetro: 1.062 km
 massa: 6,17 x 10²⁰ kg
 gravidade: 0,145 m/s²
-dia: 1,89 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 1,89 dias
+translação: 1,89 dias
 
 Ambiente
 temperatura: ±-187ºC
@@ -441,7 +407,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: cânion Ithaca Chasma`,
 
     dione: `Dione
@@ -451,11 +417,8 @@ localização: órbita de Saturno
 diâmetro: 1.123 km
 massa: 1,1 x 10²¹ kg
 gravidade: 0,232 m/s²
-dia: 2,74 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 2,74 dias
+translação: 2,74 dias
 
 Ambiente
 temperatura: ±-186ºC
@@ -464,7 +427,7 @@ pressão: muito baixa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: superfície brilhante`,
 
     reia: `Reia
@@ -474,11 +437,8 @@ localização: órbita de Saturno
 diâmetro: 1.527 km
 massa: 2,31 x 10²¹ kg
 gravidade: 0,264 m/s²
-dia: 4,52 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 4,52 dias
+translação: 4,52 dias
 
 Ambiente
 temperatura: ±-174ºC
@@ -487,7 +447,7 @@ pressão: muito baixa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: possível anel tênue`,
 
     tita: `Titã
@@ -497,11 +457,8 @@ localização: órbita de Saturno
 diâmetro: 5.151 km
 massa: 1,35 x 10²³ kg
 gravidade: 1,35 m/s²
-dia: 15,9 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 15,9 dias
+translação: 15,9 dias
 
 Ambiente
 temperatura: ±-179ºC
@@ -510,7 +467,7 @@ pressão: ~1.500 hPa
 água: gelo, lagos de metano
 atividade geológica: ativa
 magnetismo: não
-exploração: robótica
+exploração: pouso
 destaque: atmosfera densa, lagos de metano`,
 
     japeto: `Japeto
@@ -520,11 +477,8 @@ localização: órbita de Saturno
 diâmetro: 1.471 km
 massa: 1,81 x 10²¹ kg
 gravidade: 0,223 m/s²
-dia: 79,3 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 79,3 dias
+translação: 79,3 dias
 
 Ambiente
 temperatura: ±-143ºC
@@ -533,7 +487,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: claro/escuro`,
 
     miranda: `Miranda
@@ -543,11 +497,8 @@ localização: órbita de Urano
 diâmetro: 471 km
 massa: 6,59 x 10¹⁹ kg
 gravidade: 0,079 m/s²
-dia: 1,41 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 1,41 dias
+translação: 1,41 dias
 
 Ambiente
 temperatura: ±-187ºC
@@ -556,7 +507,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: terreno caótico`,
 
     ariel: `Ariel
@@ -566,11 +517,8 @@ localização: órbita de Urano
 diâmetro: 1.158 km
 massa: 1,35 x 10²¹ kg
 gravidade: 0,269 m/s²
-dia: 2,52 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 2,52 dias
+translação: 2,52 dias
 
 Ambiente
 temperatura: ±-213ºC
@@ -579,7 +527,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: cânions e vales`,
 
     umbriel: `Umbriel
@@ -589,11 +537,8 @@ localização: órbita de Urano
 diâmetro: 1.169 km
 massa: 1,17 x 10²¹ kg
 gravidade: 0,238 m/s²
-dia: 4,14 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 4,14 dias
+translação: 4,14 dias
 
 Ambiente
 temperatura: ±-214ºC
@@ -602,7 +547,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: superfície escura`,
 
     titania: `Titânia
@@ -612,11 +557,8 @@ localização: órbita de Urano
 diâmetro: 1.578 km
 massa: 3,53 x 10²¹ kg
 gravidade: 0,379 m/s²
-dia: 8,71 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 8,71 dias
+translação: 8,71 dias
 
 Ambiente
 temperatura: ±-203ºC
@@ -625,7 +567,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: maior lua de Urano`,
 
     oberon: `Oberon
@@ -635,11 +577,8 @@ localização: órbita de Urano
 diâmetro: 1.523 km
 massa: 3,01 x 10²¹ kg
 gravidade: 0,346 m/s²
-dia: 13,5 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 13,5 dias
+translação: 13,5 dias
 
 Ambiente
 temperatura: ±-203ºC
@@ -648,7 +587,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: crateras grandes`,
 
     tritao: `Tritão
@@ -658,11 +597,8 @@ localização: órbita de Netuno
 diâmetro: 2.710 km
 massa: 2,14 x 10²² kg
 gravidade: 0,779 m/s²
-dia: 5,88 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 5,88 dias
+translação: 5,88 dias
 
 Ambiente
 temperatura: ±-235ºC
@@ -671,7 +607,7 @@ pressão: muito baixa
 água: gelo
 atividade geológica: geysers
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: órbita retrógrada, geysers`,
 
     nereida: `Nereida
@@ -681,11 +617,8 @@ localização: órbita de Netuno
 diâmetro: 340 km
 massa: 3,1 x 10¹⁹ kg
 gravidade: 0,033 m/s²
-dia: 360 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 360 dias
+translação: 360 dias
 
 Ambiente
 temperatura: ±-235ºC
@@ -694,7 +627,7 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: desconhecida
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: órbita excêntrica`,
 
     plutao: `Plutão
@@ -709,7 +642,6 @@ ano: 248 anos
 luas: 5
 anéis: não
 
-
 Ambiente
 temperatura: ±-229ºC
 atmosfera: N₂, CH₄, CO tênue
@@ -717,7 +649,7 @@ pressão: muito baixa
 água: gelo
 atividade geológica: criovulcões
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: anão, órbita excêntrica`,
 
     caronte: `Caronte
@@ -727,11 +659,8 @@ localização: órbita de Plutão
 diâmetro: 1.212 km
 massa: 1,52 x 10²¹ kg
 gravidade: 0,288 m/s²
-dia: 6,4 dias
-ano: —
-luas: 0
-anéis: não
-
+rotação: 6,4 dias
+translação: 6,4 dias
 
 Ambiente
 temperatura: ±-220ºC
@@ -740,6 +669,6 @@ pressão: ~0 hPa
 água: gelo
 atividade geológica: antiga
 magnetismo: não
-exploração: robótica
+exploração: sobrevoo
 destaque: maior lua de Plutão`
 };
