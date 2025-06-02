@@ -23,7 +23,7 @@ export function Navbar() {
                 height={40} 
                 className="h-10 w-auto" 
               />
-              <span>Fórum Planetário Virtual</span>
+              <span>Planetário Virtual</span>
             </Link>
           </div>
 
@@ -49,7 +49,7 @@ export function Navbar() {
                   href={planetarioUrl} 
                   className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-bold text-sky-400 hover:text-sky-300"
                 >
-                  Via Láctea
+                  Planetário
                 </Link>
                 <Link 
                   href={fotoDoDiaUrl} 
