@@ -6,6 +6,7 @@
   - [3. Padrões de Projeto](./PadroesDeProjeto/3.PadroesDeProjeto.md)
     - [3.1. GoFs Criacionais](./PadroesDeProjeto/1.Criacionais/3.1.GoFsCriacionais.md)
       - [3.2.1 Factory](./PadroesDeProjeto/1.Criacionais/3.1.1.Factory.md)
+      - [3.2.2 Builder](./PadroesDeProjeto/1.Criacionais/3.1.2.Builder.md)
     - [3.2. GoFs Estruturais](./PadroesDeProjeto/2.Estruturais/3.2.GoFsEstruturais.md)
         - [3.2.1 Adapter](./PadroesDeProjeto/2.Estruturais/3.2.1Adapter.md)
         - [3.2.2 Decorator](./PadroesDeProjeto/2.Estruturais/3.2.2.Decorator.md.md)
