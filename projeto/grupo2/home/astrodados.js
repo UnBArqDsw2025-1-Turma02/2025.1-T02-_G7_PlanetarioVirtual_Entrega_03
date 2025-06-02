@@ -55,11 +55,10 @@ localização: 3º planeta
 diâmetro: 12.742 km
 massa: 5,972 x 10²⁴ kg
 gravidade: 9,8 m/s²
-dia: 24h
-ano: 365 dias
+rotação: 24h
+translação: 365 dias
 luas: 1
 anéis: não
-
 
 Ambiente
 temperatura: ±15ºC
