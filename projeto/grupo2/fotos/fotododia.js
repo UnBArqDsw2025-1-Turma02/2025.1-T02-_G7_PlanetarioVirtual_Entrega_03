@@ -1,5 +1,3 @@
-const BASE_API_KEY = 'DOmEoiZ5NwXtG3hTJVuRMibe3XIBduziBbYMglZK';
-
 function setupApodUI() {
     const container = document.getElementById('nasa-photo');
     if (!container) {
@@ -46,7 +44,7 @@ function setupApodUI() {
     `;
 }
 
-async function fetchAndDisplayNasaPhotos(apiKey, startDate, endDate) {
+async function fetchAndDisplayNasaPhotos(photoProvider, startDate, endDate) {
     const photosContainer = document.getElementById('apodPhotosContainer');
     const feedbackDiv = document.getElementById('apodFeedback');
 
@@ -59,29 +57,8 @@ async function fetchAndDisplayNasaPhotos(apiKey, startDate, endDate) {
     feedbackDiv.innerHTML = `<p style="color: #ccc; padding: 40px 0; font-size:1.2rem;">Carregando fotos de ${startDate} a ${endDate}...</p>`;
     photosContainer.innerHTML = '';
 
-    const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&start_date=${startDate}&end_date=${endDate}`;
-    console.log("Buscando URL:", url);
-
     try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            let detailedErrorMsg = response.statusText;
-            let userFriendlyMessage;
-            try {
-                const errorData = await response.json();
-                detailedErrorMsg = errorData.msg || detailedErrorMsg;
-                if (response.status === 404 && detailedErrorMsg.toLowerCase().includes("no data available")) {
-                    userFriendlyMessage = `Não há fotos disponíveis para o período de ${startDate} a ${endDate}. (API: ${detailedErrorMsg})`;
-                } else if (response.status === 400 && (detailedErrorMsg.toLowerCase().includes("date invalid") || detailedErrorMsg.toLowerCase().includes("invalid date"))) {
-                    userFriendlyMessage = `Formato de data inválido. Use AAAA-MM-DD. (API: ${detailedErrorMsg})`;
-                } else if (response.status === 400 && (detailedErrorMsg.toLowerCase().includes("date range is too large") || detailedErrorMsg.toLowerCase().includes("date must be between"))) {
-                     userFriendlyMessage = `O período selecionado é muito grande ou está fora dos limites da API. (API: ${detailedErrorMsg})`;
-                }
-            } catch (e) { console.warn("Não foi possível parsear JSON da resposta de erro da API."); }
-            throw new Error(userFriendlyMessage || `Erro da API: ${response.status} - ${detailedErrorMsg}`);
-        }
-
-        const dataArray = await response.json();
+        const dataArray = await photoProvider.getPhotos(startDate, endDate);
         
         if (!Array.isArray(dataArray) || dataArray.length === 0) {
             feedbackDiv.innerHTML = `<p style="color:#ffb3b3; background-color: rgba(255,100,100,0.1); border:1px solid #ff8c8c; padding:15px; border-radius:5px;">Nenhuma foto encontrada para o período de ${startDate} a ${endDate}.</p>`;
@@ -153,7 +130,8 @@ function handleFetchButtonClick() {
     const formatDate = (dateObj) => dateObj.toISOString().split('T')[0];
     const startDateString = formatDate(startDateObj);
 
-    fetchAndDisplayNasaPhotos(BASE_API_KEY, startDateString, endDateString);
+    const provider = new NasaApodAdapter('DOmEoiZ5NwXtG3hTJVuRMibe3XIBduziBbYMglZK');
+    fetchAndDisplayNasaPhotos(provider, startDateString, endDateString);
 }
 
 function initializeApp() {
