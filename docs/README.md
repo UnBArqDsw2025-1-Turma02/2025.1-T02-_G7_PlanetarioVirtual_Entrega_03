@@ -28,49 +28,73 @@ O Planetário Virtual é uma aplicação web interativa que visa proporcionar um
 Esta documentação tem como objetivo armazenar e descrever todos os artefatos produzidos e os resultados obtidos durante o desenvolvimento da terceira entrega do Grupo 07 da disciplina de Arquitetura e Desenho de Software, ministrada pela professora Milene Serrano no primeiro semestre letivo de 2025 na Universidade de Brasília (UnB).
 
 A terceira entrega teve como objetivo a implementação dos padrões de projeto GoF, especificamente os padrões criacionais, estruturais e comportamentais. Para otimizar o desenvolvimento e a especialização, o grupo foi dividido em três subgrupos, cada um responsável por um conjunto desses padrões. Essa divisão permitiu que cada equipe focasse em aspectos específicos da arquitetura do sistema, facilitando a integração dos padrões no projeto global. Dessa forma, a entrega contribuiu para consolidar a estrutura e o comportamento do sistema, alinhando a modelagem UML com uma implementação prática e consistente dos principais padrões de design.
+## Screenshots da Terceira Entrega
 
-## Screenshots da terceira Entrega
-
-
-
-### Gofs Criacionais
+### Página Inicial do Planetário
 
 <div align="center">
-  <p>Figura 1 – Diagrama do Padrão Factory</strong></p>
+  <p>Figura 1 – Página Inicial do Planetário Virtual (GIF)</p>
+  <img src="/assets/planetaior-ezgif.com-video-to-gif-converter.gif" alt="Planetário Virtual" width="800"/>
+</div>
+
+### Fórum do Planetário
+
+<div align="center">
+  <p>Figura 2 – Fórum do Planetário Virtual</p>
+  <img src="/assets/forum.png" alt="Fórum do Planetário" width="800"/>
+</div>
+
+### Swagger Python
+
+<div align="center">
+  <p>Figura 3 – Documentação da API Python (Swagger)</p>
+  <img src="/assets/swaggerPython.png" alt="Swagger Python" width="800"/>
+</div>
+
+### Swagger Java
+
+<div align="center">
+  <p>Figura 4 – Documentação da API Java (Swagger)</p>
+  <img src="/assets/swaggerJava.png" alt="Swagger Java" width="800"/>
+</div>
+
+---
+
+## GOFs Criacionais
+
+<div align="center">
+  <p>Figura 5 – Diagrama do Padrão Factory</p>
   <img src="/assets/Diagrama_Factory.png" alt="Factory" width="400"/>
 </div>
 
 <div align="center">
-  <p>Figura 2 – Diagrama do Padrão Singleton</strong></p>
+  <p>Figura 6 – Diagrama do Padrão Singleton</p>
   <img src="./assets/diagramaSingleton.png" alt="Singleton" width="400"/>
 </div>
 
-### GOFs Estruturais
+---
+
+## GOFs Estruturais
 
 <div align="center">
-  <p>Figura 3 – Diagrama do Padrão Adapter</strong></p>
+  <p>Figura 7 – Diagrama do Padrão Adapter</p>
   <img src="/assets/adapter-classes.png" alt="Adapter" width="400"/>
 </div>
 
-
 <div align="center">
-  <p>Figura 4 – Diagrama do Padrão Facade</strong></p>
+  <p>Figura 8 – Diagrama do Padrão Facade</p>
   <img src="assets/facade.png" alt="Facade" width="400"/>
 </div>
 
-### GOFs Comportamentais
+---
+
+## GOFs Comportamentais
 
 <div align="center">
-  <p>Figura 5 – Diagrama do Padrão Observer</strong></p>
+  <p>Figura 9 – Diagrama do Padrão Observer</p>
   <img src="/assets/observer-classes.png" alt="Observer" width="400"/>
 </div>
 
-### Deploy da aplicação
-
-<div align="center">
-  <p>Gif 1 – Planetário Virtual</strong></p>
-  <img src="/assets/planetaior-ezgif.com-video-to-gif-converter.gif" alt="Observer" width="800"/>
-</div>
 
 ## Há algo a ser executado?
 

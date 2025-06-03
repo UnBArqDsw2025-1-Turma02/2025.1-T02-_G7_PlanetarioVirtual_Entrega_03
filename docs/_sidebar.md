@@ -8,7 +8,7 @@
       - [3.2.1 Factory](./PadroesDeProjeto/1.Criacionais/3.1.1.Factory.md)
     - [3.2. GoFs Estruturais](./PadroesDeProjeto/2.Estruturais/3.2.GoFsEstruturais.md)
         - [3.2.1 Adapter](./PadroesDeProjeto/2.Estruturais/3.2.1Adapter.md)
-        - [3.2.2 Decorator](./PadroesDeProjeto/2.Estruturais/3.2.2.Decorator.md.md)
+        - [3.2.2 Decorator](./PadroesDeProjeto/2.Estruturais/3.2.2Decorator.md)
     - [3.3. GoFs Comportamentais](./PadroesDeProjeto/3.Comportamentais/3.3.GoFsComportamentais.md)
         - [3.3.1 Observer](./PadroesDeProjeto/3.Comportamentais/3.3.1Observer.md)
         - [3.3.2 Strategy](./PadroesDeProjeto/3.Comportamentais/3.3.2Strategy.md)
