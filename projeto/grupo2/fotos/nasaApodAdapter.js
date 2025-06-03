@@ -1,7 +1,19 @@
 class NasaApodAdapter extends PhotoProvider {
     constructor(apiKey) {
         super();
+        if (NasaApodAdapter._instance) {
+            return NasaApodAdapter._instance;
+        }
+
         this.apiKey = apiKey;
+        NasaApodAdapter._instance = this;
+    }
+
+    static getInstance(apiKey) {
+        if (!NasaApodAdapter._instance) {
+            NasaApodAdapter._instance = new NasaApodAdapter(apiKey);
+        }
+        return NasaApodAdapter._instance;
     }
 
     async getPhotos(startDate, endDate) {
