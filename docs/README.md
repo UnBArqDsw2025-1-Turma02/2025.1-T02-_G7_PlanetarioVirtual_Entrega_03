@@ -83,7 +83,7 @@ A terceira entrega teve como objetivo a implementação dos padrões de projeto 
 
 <div align="center">
   <p>Figura 8 – Diagrama do Padrão Facade</p>
-  <img src=".assets/facade.png" alt="Facade" width="400"/>
+  <img src="./assets/facade.png" alt="Facade" width="400"/>
 </div>
 
 ---
