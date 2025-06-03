@@ -2,43 +2,66 @@ package com.ArqDSw.planetario_virtual_backend.model;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import com.ArqDSw.planetario_virtual_backend.ENUM.UserType;
+import com.ArqDSw.planetario_virtual_backend.builder.UserBuilder;
 
 @Entity
-@Table(name="tb_users") 
+@Table(name="tb_users")
 public class User {
-	
-	@Id
-	@GeneratedValue
-	private Long id;
 
-	@Nonnull 
-	private String name;
-	
-	@Nonnull
-	private String email;
-	
-	@Nonnull
-	private String password;
-	
-	private String about;
-	
-	private String photoURL;
-	
-	public User() {
-	}
-	
-	private User(UserBuilder builder) {
-		this.id = builder.id;
-		this.name = builder.name;
-		this.email = builder.email;
-		this.password = builder.password;
-		this.about = builder.about;
-		this.photoURL = builder.photoURL;
-	}
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Nonnull
+    private String name;
+
+    @Nonnull
+    private String email;
+
+    @Nonnull
+    private String password;
+
+    private String about;
+
+    private String photoURL;
+
+    @Nonnull
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
+
+    public User() {
+        
+    }
+
+    public User(UserBuilder<?> builder) {
+        this.id = builder.getId(); 
+        this.name = builder.getName(); 
+        this.email = builder.getEmail(); 
+        this.password = builder.getPassword(); 
+        this.about = builder.getAbout(); 
+        this.photoURL = builder.getPhotoURL();
+        this.userType = builder.getUserType(); 
+
+        if (this.email == null || this.email.isBlank()) {
+            throw new IllegalArgumentException("Email é obrigatório.");
+        }
+        if (this.password == null || this.password.isBlank()) {
+            throw new IllegalArgumentException("Senha é obrigatória.");
+        }
+        if (this.name == null || this.name.isBlank()) {
+            throw new IllegalArgumentException("Nome é obrigatório.");
+        }
+        if (this.userType == null) {
+            throw new IllegalArgumentException("Tipo de usuário é obrigatório.");
+        }
+    }
 	
 	public Long getId() {
 		return id;
@@ -64,6 +87,10 @@ public class User {
 		return photoURL;
 	}
 
+    public UserType getUserType() {
+        return userType;
+    }
+
 	public void setId(final Long id) {
 		this.id = id;
 	}
@@ -88,47 +115,21 @@ public class User {
 		this.photoURL = photoURL;
 	}
 
-	
-	public static class UserBuilder {
-		private Long id;
-		private String name;
-		private String email;
-		private String password;
-		private String about;
-		private String photoURL;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
 
-		public UserBuilder id(Long id) {
-			this.id = id;
-			return this;
-		}
+    @Override
+    public String toString() {
+        return "User{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", email='" + email + '\'' +
+               ", password='[PROTECTED]'" +
+               ", about='" + (about != null ? about : "N/A") + '\'' +
+               ", photoURL='" + (photoURL != null ? photoURL : "N/A") + '\'' +
+               ", userType=" + userType +
+               '}';
+    }
 
-		public UserBuilder name(String name) {
-			this.name = name;
-			return this;
-		}
-
-		public UserBuilder email(String email) {
-			this.email = email;
-			return this;
-		}
-
-		public UserBuilder password(String password) {
-			this.password = password;
-			return this;
-		}
-		
-		public UserBuilder about(String about) {
-			this.about = about;
-			return this;
-		}
-		
-		public UserBuilder photoURL(String photoURL) {
-			this.photoURL = photoURL;
-			return this;
-		}
-
-		public User build() {
-			return new User(this);
-		}
-	}
 }
