@@ -1,18 +1,24 @@
 package com.ArqDSw.planetario_virtual_backend.model;
 
+import com.ArqDSw.planetario_virtual_backend.composite.Publicacao;
+
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.CascadeType;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="tb_postagens")
-public class Postagem {
+public class Postagem implements Publicacao {
 
     @Id
     @GeneratedValue
@@ -21,7 +27,7 @@ public class Postagem {
     @Nonnull
     private String texto;
 
-    @ManyToOne 
+    @ManyToOne
     @JoinColumn(name = "autor_id")
     @Nonnull
     private User autor;
@@ -30,7 +36,10 @@ public class Postagem {
     private LocalDateTime dataCriacao;
 
     private int totalCurtidas;
-    private int totalNaoCurtidas; 
+    private int totalNaoCurtidas;
+
+    @OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comentario> comentarios = new ArrayList<>();
 
     public Postagem() {
     }
@@ -68,6 +77,10 @@ public class Postagem {
         return totalNaoCurtidas;
     }
 
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -90,6 +103,26 @@ public class Postagem {
 
     public void setTotalNaoCurtidas(int totalNaoCurtidas) {
         this.totalNaoCurtidas = totalNaoCurtidas;
+    }
+
+    public void addComentario(Comentario comentario) {
+        this.comentarios.add(comentario);
+        comentario.setPostagem(this);
+    }
+
+    public void removeComentario(Comentario comentario) {
+        this.comentarios.remove(comentario);
+        comentario.setPostagem(null);
+    }
+
+    @Override
+    public void like() {
+        this.totalCurtidas++;
+    }
+
+    @Override
+    public void dislike() {
+        this.totalNaoCurtidas++;
     }
 
     public static class PostagemBuilder {

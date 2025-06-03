@@ -3,6 +3,9 @@ package com.ArqDSw.planetario_virtual_backend.controller;
 import com.ArqDSw.planetario_virtual_backend.dto.PostagemDTO;
 import com.ArqDSw.planetario_virtual_backend.dto.PostagemResponseDTO;
 import com.ArqDSw.planetario_virtual_backend.service.PostagemService;
+import com.ArqDSw.planetario_virtual_backend.command.Command;
+import com.ArqDSw.planetario_virtual_backend.model.Postagem;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,8 +50,9 @@ public class PostagemController {
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @ApiResponse(responseCode = "404", description = "Author not found")
     public ResponseEntity<PostagemResponseDTO> createPostagem(@Valid @RequestBody PostagemDTO postagemDTO) {
-        PostagemResponseDTO newPostagem = postagemService.createPostagem(postagemDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newPostagem);
+        Command command = postagemService.createPostagemCommand(postagemDTO);
+        Postagem newPostagem = (Postagem) command.execute();
+        return ResponseEntity.status(HttpStatus.CREATED).body(postagemService.convertToResponseDTO(newPostagem));
     }
 
     @PutMapping("/{id}")
@@ -59,8 +63,9 @@ public class PostagemController {
     public ResponseEntity<PostagemResponseDTO> updatePostagem(
             @PathVariable Long id,
             @Valid @RequestBody PostagemDTO postagemDTO) {
-        PostagemResponseDTO updatedPostagem = postagemService.updatePostagem(id, postagemDTO);
-        return ResponseEntity.ok(updatedPostagem);
+        Command command = postagemService.updatePostagemCommand(id, postagemDTO);
+        Postagem updatedPostagem = (Postagem) command.execute();
+        return ResponseEntity.ok(postagemService.convertToResponseDTO(updatedPostagem));
     }
 
     @PatchMapping("/{id}/like")
@@ -68,8 +73,9 @@ public class PostagemController {
     @ApiResponse(responseCode = "200", description = "Postagem liked successfully")
     @ApiResponse(responseCode = "404", description = "Postagem not found")
     public ResponseEntity<PostagemResponseDTO> likePostagem(@PathVariable Long id) {
-        PostagemResponseDTO likedPostagem = postagemService.likePostagem(id);
-        return ResponseEntity.ok(likedPostagem);
+        Command command = postagemService.likePostagemCommand(id);
+        Postagem likedPostagem = (Postagem) command.execute();
+        return ResponseEntity.ok(postagemService.convertToResponseDTO(likedPostagem));
     }
 
     @PatchMapping("/{id}/dislike")
@@ -77,8 +83,9 @@ public class PostagemController {
     @ApiResponse(responseCode = "200", description = "Postagem disliked successfully")
     @ApiResponse(responseCode = "404", description = "Postagem not found")
     public ResponseEntity<PostagemResponseDTO> dislikePostagem(@PathVariable Long id) {
-        PostagemResponseDTO dislikedPostagem = postagemService.dislikePostagem(id);
-        return ResponseEntity.ok(dislikedPostagem);
+        Command command = postagemService.dislikePostagemCommand(id);
+        Postagem dislikedPostagem = (Postagem) command.execute();
+        return ResponseEntity.ok(postagemService.convertToResponseDTO(dislikedPostagem));
     }
 
 
@@ -87,7 +94,8 @@ public class PostagemController {
     @ApiResponse(responseCode = "204", description = "Postagem deleted successfully")
     @ApiResponse(responseCode = "404", description = "Postagem not found")
     public ResponseEntity<Void> deletePostagem(@PathVariable Long id) {
-        postagemService.deletePostagem(id);
+        Command command = postagemService.deletePostagemCommand(id);
+        command.execute();
         return ResponseEntity.noContent().build();
     }
 }
