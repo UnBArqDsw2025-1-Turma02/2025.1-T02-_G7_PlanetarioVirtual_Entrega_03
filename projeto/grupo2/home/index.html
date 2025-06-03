@@ -167,11 +167,50 @@
             return container;
         }
 
+        // Factory para criar cinturões de asteroides customizados
+        function criarCinturaoFactory({ corInicial = { r: 90, g: 56, b: 37 }, corFinal = { r: 153, g: 153, b: 153 }, tamanhoMin = 1, tamanhoMax = 3, profundidade = -5, rotacao = 0.0005 }) {
+            return function criarCinturao(scene, x, y, raioInterno, raioExterno, quantidade) {
+                const graphics = scene.add.graphics();
+                graphics.setDepth(profundidade);
 
+                for (let i = 0; i < quantidade; i++) {
+                    const angulo = Phaser.Math.FloatBetween(0, Math.PI * 2);
+                    const distancia = Phaser.Math.FloatBetween(raioInterno, raioExterno);
+                    const tamanho = Phaser.Math.Between(tamanhoMin, tamanhoMax);
 
+                    const t = Phaser.Math.FloatBetween(0, 1);
+                    const cor = Phaser.Display.Color.Interpolate.ColorWithColor(
+                        new Phaser.Display.Color(corInicial.r, corInicial.g, corInicial.b),
+                        new Phaser.Display.Color(corFinal.r, corFinal.g, corFinal.b),
+                        100,
+                        t * 100
+                    );
+                    const corHex = Phaser.Display.Color.GetColor(cor.r, cor.g, cor.b);
 
+                    const ax = x + Math.cos(angulo) * distancia;
+                    const ay = y + Math.sin(angulo) * distancia;
 
+                    graphics.fillStyle(corHex, 1);
+                    graphics.fillRect(ax - tamanho / 2, ay - tamanho / 2, tamanho, tamanho);
+                }
 
+                const container = scene.add.container(x, y, [graphics]);
+                container.setDepth(profundidade);
+
+                scene.events.on('update', () => {
+                    container.rotation += rotacao;
+                });
+
+                return container;
+            }
+        }
+
+        // Exemplo de uso:
+        const criarCinturaoAsteroides = criarCinturaoFactory({});
+        const criarCinturaoKuiper = criarCinturaoFactory({
+            tamanhoMin: 2,
+            tamanhoMax: 5
+        });
 
 
         function preload() {
@@ -317,8 +356,8 @@
             const netuno = criarAstro(this, 0, 0, 10, 0x00008b, { centro: sol, raio: 650, velocidade: astroVel * 0.18 }, 20, moonTrace * 10, 'netuno', 300);
             const tritão = criarAstro(this, 0, 0, 2, 0xb0e0e6, { centro: netuno, raio: 20, velocidade: astroVel * 0.15 }, 90, moonTrace, 'tritao', 180, false);
 
-            const asteroides = criarCinturao(this, 0, 0, 280, 320, 200);
-            const kuiper = criarCinturao(this, 0, 0, 700, 800, 600);
+            const asteroides = criarCinturaoAsteroides(this, 0, 0, 280, 320, 200);
+            const kuiper = criarCinturaoKuiper(this, 0, 0, 700, 800, 600);
 
             const sistema_plutão = criarAstro(this, 0, 0, 5, 0x8b0000, { centro: sol, raio: 750, velocidade: astroVel * 0.1 }, 20, moonTrace * 10);
             const plutão = criarAstro(this, 0, 0, 5, 0x8b0000, { centro: sistema_plutão, raio: 5, velocidade: astroVel * 1 }, 90, moonTrace, 'plutao');
