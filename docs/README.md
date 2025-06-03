@@ -31,14 +31,46 @@ A terceira entrega teve como objetivo a implementação dos padrões de projeto 
 
 ## Screenshots da terceira Entrega
 
-### Diagrama do Padrão Factory
-![Diagrama de Classe](assets/DiagramaDeClasse.png)
-
-### Diagrama do Padrão Decorator
-
-![Diagrama de Componentes](assets/diagramaComponentes.jpg)
 
 
+### Gofs Criacionais
+
+<div align="center">
+  <p>Figura 1 – Diagrama do Padrão Factory</strong></p>
+  <img src="/assets/Diagrama_Factory.png" alt="Factory" width="400"/>
+</div>
+
+<div align="center">
+  <p>Figura 2 – Diagrama do Padrão Singleton</strong></p>
+  <img src="./assets/diagramaSingleton.png" alt="Singleton" width="400"/>
+</div>
+
+### GOFs Estruturais
+
+<div align="center">
+  <p>Figura 3 – Diagrama do Padrão Adapter</strong></p>
+  <img src="/assets/adapter-classes.png" alt="Adapter" width="400"/>
+</div>
+
+
+<div align="center">
+  <p>Figura 4 – Diagrama do Padrão Facade</strong></p>
+  <img src="assets/facade.png" alt="Facade" width="400"/>
+</div>
+
+### GOFs Comportamentais
+
+<div align="center">
+  <p>Figura 5 – Diagrama do Padrão Observer</strong></p>
+  <img src="/assets/observer-classes.png" alt="Observer" width="400"/>
+</div>
+
+### Deploy da aplicação
+
+<div align="center">
+  <p>Gif 1 – Planetário Virtual</strong></p>
+  <img src="/assets/planetaior-ezgif.com-video-to-gif-converter.gif" alt="Observer" width="800"/>
+</div>
 
 ## Há algo a ser executado?
 
@@ -53,4 +85,5 @@ A terceira entrega teve como objetivo a implementação dos padrões de projeto 
 | Versão | Data       | Descrição                                | Autor            | Revisor          |
 |--------|------------|------------------------------------------|------------------|------------------|
 | 1.0    | 01/06/2025 | Criação inicial do documento             | [Milena Rocha](https://github.com/MilenaFRocha) | [Rafael Pereira](https://github.com/rafgpereira) |
+| 1.1    | 01/06/2025 | Upload de imagens      | [Milena Rocha](https://github.com/MilenaFRocha) | [Rafael Pereira](https://github.com/rafgpereira) |
 
