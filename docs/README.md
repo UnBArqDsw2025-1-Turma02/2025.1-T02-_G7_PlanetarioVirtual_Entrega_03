@@ -55,7 +55,7 @@ A terceira entrega teve como objetivo a implementação dos padrões de projeto 
 
 <div align="center">
   <p>Figura 4 – Documentação da API Java (Swagger)</p>
-  <img src="./assets/swaggerJava.png" alt="Swagger Java" width="800"/>
+  <img src="./assets/swaggerjava.png" alt="Swagger Java" width="800"/>
 </div>
 
 ---
@@ -78,12 +78,12 @@ A terceira entrega teve como objetivo a implementação dos padrões de projeto 
 
 <div align="center">
   <p>Figura 7 – Diagrama do Padrão Adapter</p>
-  <img src="/assets/adapter-classes.png" alt="Adapter" width="400"/>
+  <img src="./assets/adapter-classes.png" alt="Adapter" width="400"/>
 </div>
 
 <div align="center">
   <p>Figura 8 – Diagrama do Padrão Facade</p>
-  <img src="assets/facade.png" alt="Facade" width="400"/>
+  <img src="./assets/facade.png" alt="Facade" width="400"/>
 </div>
 
 ---
@@ -92,7 +92,7 @@ A terceira entrega teve como objetivo a implementação dos padrões de projeto 
 
 <div align="center">
   <p>Figura 9 – Diagrama do Padrão Observer</p>
-  <img src="/assets/observer-classes.png" alt="Observer" width="400"/>
+  <img src="./assets/observer-classes.png" alt="Observer" width="400"/>
 </div>
 
 
