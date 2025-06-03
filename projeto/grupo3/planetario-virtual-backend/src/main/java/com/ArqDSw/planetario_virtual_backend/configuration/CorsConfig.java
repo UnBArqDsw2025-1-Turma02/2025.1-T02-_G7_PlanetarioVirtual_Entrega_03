@@ -16,6 +16,8 @@ public class CorsConfig {
                 registry.addMapping("/**") 
                         .allowedOrigins("https://worthy-latia-planetario-virtual-02f6584c.koyeb.app/", 
                         "http://worthy-latia-planetario-virtual-02f6584c.koyeb.app/", 
+                        "http://worthy-latia-planetario-virtual-02f6584c.koyeb.app",
+                        "https://worthy-latia-planetario-virtual-02f6584c.koyeb.app",
                         "http://localhost:8080/") 
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") 
                         .allowedHeaders("*") 
