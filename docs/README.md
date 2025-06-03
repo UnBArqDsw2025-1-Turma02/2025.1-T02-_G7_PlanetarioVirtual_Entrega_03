@@ -34,28 +34,28 @@ A terceira entrega teve como objetivo a implementação dos padrões de projeto 
 
 <div align="center">
   <p>Figura 1 – Página Inicial do Planetário Virtual (GIF)</p>
-  <img src="/assets/planetaior-ezgif.com-video-to-gif-converter.gif" alt="Planetário Virtual" width="800"/>
+  <img src="./assets/planetaior-ezgif.com-video-to-gif-converter.gif" alt="Planetário Virtual" width="800"/>
 </div>
 
 ### Fórum do Planetário
 
 <div align="center">
   <p>Figura 2 – Fórum do Planetário Virtual</p>
-  <img src="/assets/forum.png" alt="Fórum do Planetário" width="800"/>
+  <img src="./assets/forum.png" alt="Fórum do Planetário" width="800"/>
 </div>
 
 ### Swagger Python
 
 <div align="center">
   <p>Figura 3 – Documentação da API Python (Swagger)</p>
-  <img src="/assets/swaggerPython.png" alt="Swagger Python" width="800"/>
+  <img src="./assets/swaggerPython.png" alt="Swagger Python" width="800"/>
 </div>
 
 ### Swagger Java
 
 <div align="center">
   <p>Figura 4 – Documentação da API Java (Swagger)</p>
-  <img src="/assets/swaggerJava.png" alt="Swagger Java" width="800"/>
+  <img src="./assets/swaggerJava.png" alt="Swagger Java" width="800"/>
 </div>
 
 ---
@@ -64,7 +64,7 @@ A terceira entrega teve como objetivo a implementação dos padrões de projeto 
 
 <div align="center">
   <p>Figura 5 – Diagrama do Padrão Factory</p>
-  <img src="/assets/Diagrama_Factory.png" alt="Factory" width="400"/>
+  <img src="./assets/Diagrama_Factory.png" alt="Factory" width="400"/>
 </div>
 
 <div align="center">
