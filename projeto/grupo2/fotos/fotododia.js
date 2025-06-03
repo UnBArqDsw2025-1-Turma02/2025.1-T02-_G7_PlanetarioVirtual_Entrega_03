@@ -130,7 +130,7 @@ function handleFetchButtonClick() {
     const formatDate = (dateObj) => dateObj.toISOString().split('T')[0];
     const startDateString = formatDate(startDateObj);
 
-    const provider = new NasaApodAdapter('DOmEoiZ5NwXtG3hTJVuRMibe3XIBduziBbYMglZK');
+    const provider = NasaApodAdapter.getInstance('DOmEoiZ5NwXtG3hTJVuRMibe3XIBduziBbYMglZK');
     fetchAndDisplayNasaPhotos(provider, startDateString, endDateString);
 }
 
