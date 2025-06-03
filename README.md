@@ -1,5 +1,7 @@
 ## 🌠 Sobre o Projeto
 
+Acesse o projeto: [Planetário Virtual](https://2025-1-t02-g7-planetario-virtual-en-seven.vercel.app/home/index.html)
+
 O **Planetário Virtual** é uma aplicação web interativa que oferece uma experiência imersiva de aprendizado e exploração do universo 🌍✨. A plataforma foi pensada para ser acessível e visualmente intuitiva, permitindo que os usuários:
 
 📸 Visualizem a **Imagem do Dia da NASA**<br>
