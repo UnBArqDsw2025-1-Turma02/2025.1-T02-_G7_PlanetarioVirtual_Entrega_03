@@ -13,14 +13,11 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") 
-                        .allowedOrigins("https://worthy-latia-planetario-virtual-02f6584c.koyeb.app/", 
-                        "http://worthy-latia-planetario-virtual-02f6584c.koyeb.app/", 
-                        "http://localhost:8080/") 
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") 
-                        .allowedHeaders("*") 
-                        .allowCredentials(true) 
-                        .maxAge(3600); 
+                registry.addMapping("/**")
+                        .allowedOriginPatterns("*") 
+                        .allowedMethods("*")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
